@@ -1,5 +1,6 @@
 scripts:
-- name: Incident Response
+- id: incident_response
+  name: Incident Response
   description: >
     Channel "Incident Response" should use a set of webhooks to simulate an incident response
     (inbound webhooks can be used to simulate users with name, profile pic and content of messages)
@@ -10,20 +11,34 @@ scripts:
     description: >
       Issue: #1231 - Serverity: S1 - Opened at 2019/01/04 16:32
   users:
-  - name: Draven Huber
+  - id: dhuber
+    name: Draven Huber
     position: Network Admin
-  - name: Lance Costa
+  - id: lcosta
+    name: Lance Costa
     position: Network Engineer
-  bots:
-  - name: Incident Bot
-  - name: ZenDesk
+  - id: incidentbot
+    name: Incident Bot
+    bot: true
+  - id: zendesk
+    name: ZenDesk
+    bot: true
   messages:
-  - user: Incident Bot
+  - user_id: incidentbot
     message: >
-      ###Critical Security Issue Identified.
+      ### Critical Security Issue Identified
+
+
       Issue Severity S1 (Immediate response required)
-    post_delay: 2
-  - user: ZenDesk
+    post_delay: 6
+  - user_id: systembot
+    message: >
+      ### Critical Security Issue Identified
+
+
+      Issue Severity S1 (Immediate response required)
+    post_delay: 6
+  - user_id: zendesk
     attachments:
     - title: >
         Zendesk Issue #12345
@@ -45,14 +60,14 @@ scripts:
       - name: Confirm Incident
         response_id: response_1
       - name: Close Incident as False Positive
-    post_delay: 2
-  - user: Draven Huber
+    post_delay: 6
+  - user_id: dhuber
     message: >
       Received the notification on my cell phone and I am online reviewing our logs.
       Looks like we have a DDoS type of issue here.  I am seeing a large number of HTTP requests flooding the system.
       We are well over our HTTP threshold, which is what triggered this alarm.
   responses:
   - id: response_1
-    user: Incident Bot
+    user_id: incidentbot
     message: >
       First Response SLA met for S1 Issue.
