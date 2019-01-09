@@ -5,6 +5,10 @@ HTTP ?= $(shell command -v http 2> /dev/null)
 CURL ?= $(shell command -v curl 2> /dev/null)
 MANIFEST_FILE ?= plugin.json
 
+MM_SERVICESETTINGS_SITEURL=http://localhost:8065
+MM_ADMIN_USERNAME=dschalla
+MM_ADMIN_PASSWORD=testtest
+
 # Verify environment, and define PLUGIN_ID, PLUGIN_VERSION, HAS_SERVER and HAS_WEBAPP as needed.
 include build/setup.mk
 
@@ -68,9 +72,9 @@ endif
 server: server/.depensure
 ifneq ($(HAS_SERVER),)
 	mkdir -p server/dist;
-	cd server && env GOOS=linux GOARCH=amd64 $(GO) build -o dist/plugin-linux-amd64;
-	cd server && env GOOS=darwin GOARCH=amd64 $(GO) build -o dist/plugin-darwin-amd64;
-	cd server && env GOOS=windows GOARCH=amd64 $(GO) build -o dist/plugin-windows-amd64.exe;
+	cd server && env GOOS=linux GOARCH=amd64 $(GO) build -gcflags "all=-N -l" -o dist/plugin-linux-amd64;
+	cd server && env GOOS=darwin GOARCH=amd64 $(GO) build -gcflags "all=-N -l" -o dist/plugin-darwin-amd64;
+	cd server && env GOOS=windows GOARCH=amd64 $(GO) build -gcflags "all=-N -l" -o dist/plugin-windows-amd64.exe;
 endif
 
 ## Ensures NPM dependencies are installed without having to run this all the time.
@@ -138,6 +142,15 @@ else ifneq ($(wildcard ../mattermost-server/.*),)
 	tar -C ../mattermost-server/plugins -zxvf dist/$(BUNDLE_NAME)
 else
 	@echo "No supported deployment method available. Install plugin manually."
+endif
+
+## Installs the plugin to a (development) server.
+.PHONY: deploy_debug_server
+deploy_debug_server: deploy
+ifneq ($(HAS_SERVER),)
+	$(eval PLUGIN_PID := $(shell ps aux | grep "$(PLUGIN_ID)" | grep -v "grep" | awk -F " " '{print $$2}'))
+	@echo "Located Plugin running with PID: $(PLUGIN_PID)"
+	dlv attach $(PLUGIN_PID) --listen :2345 --headless=true --api-version=2
 endif
 
 ## Runs any lints and unit tests defined for the server and webapp, if they exist.

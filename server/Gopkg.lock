@@ -34,6 +34,14 @@
   version = "v1.4.7"
 
 [[projects]]
+  digest = "1:18108594151654e9e696b27b181b953f9a90b16bf14d253dd1b397b025a1487f"
+  name = "github.com/go-yaml/yaml"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "51d6538a90f86fe93ac480b35f37b2be17fef232"
+  version = "v2.2.2"
+
+[[projects]]
   digest = "1:63ccdfbd20f7ccd2399d0647a7d100b122f79c13bb83da9660b1598396fd9f62"
   name = "github.com/golang/protobuf"
   packages = [
@@ -405,6 +413,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/go-yaml/yaml",
     "github.com/mattermost/mattermost-server/model",
     "github.com/mattermost/mattermost-server/plugin",
     "github.com/pkg/errors",

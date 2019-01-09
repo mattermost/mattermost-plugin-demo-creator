@@ -58,22 +58,18 @@ type ScriptAttachmentField struct {
 }
 
 type ScriptAttachmentAction struct {
-	Name      string
+	Name       string
 	ResponseId string `yaml:"response_id"`
 }
 
 type ScriptResponses struct {
 	Id      string
-	UserId  string
-	Message string
+	Message ScriptMessage
 }
 
 func (s *Script) RunScript(teamId, botId, userId string, api plugin.API) {
 	rand.Seed(time.Now().Unix())
 	randomNr := rand.Intn(99999)
-
-	api.LogWarn("TEAM ID: " + teamId)
-	api.LogWarn("USER ID: " + userId)
 
 	channelExists, _ := api.GetChannelByName(teamId, s.Channel.Id+strconv.Itoa(randomNr), false)
 	if channelExists != nil {
@@ -83,6 +79,7 @@ func (s *Script) RunScript(teamId, botId, userId string, api plugin.API) {
 	channel := &model.Channel{
 		Name:        s.Channel.Id + strconv.Itoa(randomNr),
 		DisplayName: s.Channel.Name + " " + strconv.Itoa(randomNr),
+		Header:      s.Channel.Description,
 		TeamId:      teamId,
 		Type:        model.CHANNEL_OPEN,
 	}
@@ -133,10 +130,18 @@ func (s *Script) RunScript(teamId, botId, userId string, api plugin.API) {
 
 	api.AddChannelMember(channel.Id, userId)
 
+	s.sendScriptProlog(api, channel.Id, botId, userId)
+	time.Sleep(time.Second * time.Duration(10))
+
+	api.LogDebug("Starting Post Generation...")
+	s.createMessages(api, channel.Id, users)
+}
+
+func (s *Script) sendScriptProlog(api plugin.API, channelId, botId, userId string) {
 	user, _ := api.GetUser(userId)
 
 	post := &model.Post{}
-	post.ChannelId = channel.Id
+	post.ChannelId = channelId
 	post.UserId = botId
 	post.AddProp("attachments", []*model.SlackAttachment{
 		{
@@ -147,12 +152,15 @@ func (s *Script) RunScript(teamId, botId, userId string, api plugin.API) {
 		},
 	})
 	api.CreatePost(post)
+}
 
-	time.Sleep(time.Second * time.Duration(10))
-	api.LogDebug("Starting Post Generation...")
+func (s *Script) createMessages(api plugin.API, channelId string, users map[string]*model.User) {
+
+	url := *api.GetConfig().ServiceSettings.SiteURL
+
 	for _, message := range s.Messages {
 		post := &model.Post{}
-		post.ChannelId = channel.Id
+		post.ChannelId = channelId
 		post.Message = message.Message
 		var attachments []*model.SlackAttachment
 		for _, attachment := range message.Attachments {
@@ -173,6 +181,13 @@ func (s *Script) RunScript(teamId, botId, userId string, api plugin.API) {
 			for _, action := range attachment.Actions {
 				slackAttachment.Actions = append(slackAttachment.Actions, &model.PostAction{
 					Name: action.Name,
+					Integration: &model.PostActionIntegration{
+						URL: url + "/plugins/com.dschalla.matterdemo-plugin/trigger_response",
+						Context: map[string]interface{}{
+							"response_id": action.ResponseId,
+							"script_id": s.Id,
+						},
+					},
 				})
 			}
 			attachments = append(attachments, &slackAttachment)
@@ -189,15 +204,10 @@ func (s *Script) RunScript(teamId, botId, userId string, api plugin.API) {
 
 		for _, tmpBots := range s.Users {
 			if message.UserId == tmpBots.Id && tmpBots.Bot {
-				post.AddProp("from_webhook", true)
+				post.AddProp("from_webhook", "true")
 				break
 			}
 		}
-
-		reaction := &model.Reaction{
-
-		}
-		api.AddReaction()
 
 		api.CreatePost(post)
 		time.Sleep(time.Second * time.Duration(message.PostDelay))

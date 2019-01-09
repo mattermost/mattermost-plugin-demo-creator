@@ -71,3 +71,71 @@ scripts:
     user_id: incidentbot
     message: >
       First Response SLA met for S1 Issue.
+
+############################################
+############################################
+
+- id: system_monitoring
+  name: System Monitoring
+  description: >
+     .... Fill in .....
+  channel:
+    id: system_monitoring
+    name: System Monitoring
+    description: >
+      This is a description.
+  users:
+  - id: dhuber
+    name: Draven Huber
+    position: Network Admin
+  - id: lcosta
+    name: Lance Costa
+    position: Network Engineer
+  messages:
+  - user_id: incidentbot
+    message: >
+      ### Critical Security Issue Identified
+
+
+      Issue Severity S1 (Immediate response required)
+    post_delay: 6
+  - user_id: systembot
+    message: >
+      ### Critical Security Issue Identified
+
+
+      Issue Severity S1 (Immediate response required)
+    post_delay: 6
+  - user_id: zendesk
+    attachments:
+    - title: >
+        Zendesk Issue #12345
+      titleLink: http://zendesk.com/12345
+      color: >
+        #ff0000
+      author_name: ZenDesk
+      fields:
+      - title: No#
+        value: 12345
+        short: True
+      - title: SLA Assigned
+        value: 15 Min
+        short: True
+      - title: Severity
+        value: S1
+        short: True
+      actions:
+      - name: Confirm Incident
+        response_id: response_1
+      - name: Close Incident as False Positive
+    post_delay: 6
+  - user_id: dhuber
+    message: >
+      Received the notification on my cell phone and I am online reviewing our logs.
+      Looks like we have a DDoS type of issue here.  I am seeing a large number of HTTP requests flooding the system.
+      We are well over our HTTP threshold, which is what triggered this alarm.
+  responses:
+  - id: response_1
+    user_id: incidentbot
+    message: >
+      First Response SLA met for S1 Issue.

@@ -57,20 +57,24 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 	p.API.LogInfo(fmt.Sprintf("REQUEST URL: %s", r.URL.Path))
 
 	path := r.URL.Path
+	requestData := struct{
+		UserId string `json:"user_id"`
+		PostId string `json:"post_id"`
+		ChannelId string `json:"channel_id"`
+		TeamId string `json:"team_id"`
+		Context map[string]string
+	}{}
 
 	if strings.HasPrefix(path, "/start_script") {
 		bodyBytes, _ := ioutil.ReadAll(r.Body)
-		p.API.LogDebug(fmt.Sprintf("BODY: %+v", bodyBytes))
-		requestData := struct{
-			UserId string `json:"user_id"`
-			PostId string `json:"post_id"`
-			ChannelId string `json:"channel_id"`
-			TeamId string `json:"team_id"`
-			Context map[string]string
-		}{}
+		p.API.LogDebug(fmt.Sprintf("REQUEST: %+v", r))
 		json.Unmarshal(bodyBytes, &requestData)
-		p.API.LogDebug(fmt.Sprintf("PARSED: %+v", requestData))
 		p.server.StartScript(requestData.TeamId, requestData.UserId, requestData.Context["script_id"])
+	} else if strings.HasPrefix(path, "/trigger_response") {
+		bodyBytes, _ := ioutil.ReadAll(r.Body)
+		p.API.LogDebug(fmt.Sprintf("REQUEST: %+v", r))
+		json.Unmarshal(bodyBytes, &requestData)
+		p.server.TriggerResponse(requestData.ChannelId, requestData.UserId, requestData.Context["script_id"], requestData.Context["response_id"])
 	}
 	w.WriteHeader(http.StatusOK)
 }
