@@ -1,6 +1,7 @@
 scripts:
 - id: incident_response
   name: Incident Response
+  priority: 1
   description: >
     Channel "Incident Response" should use a set of webhooks to simulate an incident response
     (inbound webhooks can be used to simulate users with name, profile pic and content of messages)
@@ -25,18 +26,24 @@ scripts:
     bot: true
   messages:
   - user_id: incidentbot
-    message: >
+    text: >
       ### Critical Security Issue Identified
 
 
       Issue Severity S1 (Immediate response required)
     post_delay: 6
   - user_id: systembot
-    message: >
+    text: >
       ### Critical Security Issue Identified
 
 
       Issue Severity S1 (Immediate response required)
+    post_delay: 6
+  - user_id: demobot
+    text: >
+      ### Interactive Messages
+
+      This is an interactive message....
     post_delay: 6
   - user_id: zendesk
     attachments:
@@ -62,15 +69,16 @@ scripts:
       - name: Close Incident as False Positive
     post_delay: 6
   - user_id: dhuber
-    message: >
+    text: >
       Received the notification on my cell phone and I am online reviewing our logs.
       Looks like we have a DDoS type of issue here.  I am seeing a large number of HTTP requests flooding the system.
       We are well over our HTTP threshold, which is what triggered this alarm.
   responses:
   - id: response_1
-    user_id: incidentbot
-    message: >
-      First Response SLA met for S1 Issue.
+    message:
+      user_id: incidentbot
+      text: >
+        First Response SLA met for S1 Issue.
 
 ############################################
 ############################################
@@ -93,14 +101,14 @@ scripts:
     position: Network Engineer
   messages:
   - user_id: incidentbot
-    message: >
+    text: >
       ### Critical Security Issue Identified
 
 
       Issue Severity S1 (Immediate response required)
     post_delay: 6
   - user_id: systembot
-    message: >
+    text: >
       ### Critical Security Issue Identified
 
 
@@ -127,15 +135,101 @@ scripts:
       actions:
       - name: Confirm Incident
         response_id: response_1
-      - name: Close Incident as False Positive
+      - name: Close Incident as False Positiveresponse_1
     post_delay: 6
   - user_id: dhuber
-    message: >
+    text: >
       Received the notification on my cell phone and I am online reviewing our logs.
       Looks like we have a DDoS type of issue here.  I am seeing a large number of HTTP requests flooding the system.
       We are well over our HTTP threshold, which is what triggered this alarm.
   responses:
   - id: response_1
-    user_id: incidentbot
-    message: >
-      First Response SLA met for S1 Issue.
+    message:
+      user_id: incidentbot
+      text: >
+        First Response SLA met for S1 Issue.
+
+############################################
+############################################
+
+- id: developer_release
+  name: Developer Release
+  description: >
+    .... Fill in .....
+  channel:
+    id: developer_release
+    name: Developer Release
+    description: >
+      This is a description.
+  users:
+  - id: dhuber
+    name: Draven Huber
+    position: Lead Developer
+  messages:
+  - user_id: incidentbot
+    text: >
+      ### Critical Security Issue Identified
+
+
+      Issue Severity S1 (Immediate response required)
+    post_delay: 3
+  - user_id: systembot
+    text: >
+      ### Critical Security Issue Identified
+
+
+      Issue Severity S1 (Immediate response required)
+    post_delay: 6
+  - user_id: zendesk
+    attachments:
+    - title: >
+        Zendesk Issue #12345
+      titleLink: http://zendesk.com/12345
+      color: >
+        #ff0000
+      author_name: ZenDesk
+      fields:
+      - title: No#
+        value: 12345
+        short: True
+      - title: SLA Assigned
+        value: 15 Min
+        short: True
+      - title: Severity
+        value: S1
+        short: True
+      actions:
+      - name: Confirm Incident
+        response_id: response_1
+      - name: Close Incident as False Positiv
+        response_id: response_2
+    post_delay: 6
+  - user_id: dhuber
+    text: >
+      Received the notification on my cell phone and I am online reviewing our logs.
+      Looks like we have a DDoS type of issue here.  I am seeing a large number of HTTP requests flooding the system.
+      We are well over our HTTP threshold, which is what triggered this alarm.
+  responses:
+  - id: response_1
+    message:
+      user_id: incidentbot
+      text: >
+        First Response SLA met for S1 Issue.
+  - id: response_2
+    message:
+      user_id: zendesk
+      attachments:
+      - title: >
+          Zendesk Issue #12345 - Incident Updated
+        titleLink: http://zendesk.com/12345
+        color: >
+          #00ff00
+        author_name: ZenDesk
+        text: Incident closed as false positive
+
+        - user_id: incidentbot
+          text: >
+            InfraFXServerHostBot:
+            HA Cluster - Server 1: Server is started
+  - user_id: incidentbot
+    text: >

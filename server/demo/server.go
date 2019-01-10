@@ -154,7 +154,7 @@ func (s *Server) StartScript(teamId, userId, scriptId string) error {
 	return nil
 }
 
-func (s *Server) TriggerResponse(teamId, userId, scriptId, responseId string) error {
+func (s *Server) TriggerResponse(channelId, userId, scriptId, responseId string) error {
 	var script Script
 
 	for _, tmpScript := range s.scripts {
@@ -165,9 +165,8 @@ func (s *Server) TriggerResponse(teamId, userId, scriptId, responseId string) er
 	}
 
 	if script.Id == "" {
-		return errors.New("scriptId not found")
+		return errors.New("script not found")
 	}
 
-	go script.RunScript(teamId, s.botUser.Id, userId, s.api)
-	return nil
+	return script.TriggerResponse(responseId, channelId, userId, s.api)
 }

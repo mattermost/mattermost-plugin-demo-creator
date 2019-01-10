@@ -1,6 +1,7 @@
 package demo
 
 import (
+	"errors"
 	"fmt"
 	"github.com/mattermost/mattermost-server/model"
 	"github.com/mattermost/mattermost-server/plugin"
@@ -18,7 +19,7 @@ type Script struct {
 	Channel     ScriptChannel
 	Users       []ScriptUser
 	Messages    []ScriptMessage
-	Responses   []ScriptResponses
+	Responses   []ScriptResponse
 }
 
 type ScriptChannel struct {
@@ -36,7 +37,7 @@ type ScriptUser struct {
 
 type ScriptMessage struct {
 	UserId      string `yaml:"user_id"`
-	Message     string
+	Text        string
 	Attachments []ScriptAttachment
 	PostDelay   int `yaml:"post_delay"`
 }
@@ -62,7 +63,7 @@ type ScriptAttachmentAction struct {
 	ResponseId string `yaml:"response_id"`
 }
 
-type ScriptResponses struct {
+type ScriptResponse struct {
 	Id      string
 	Message ScriptMessage
 }
@@ -134,7 +135,32 @@ func (s *Script) RunScript(teamId, botId, userId string, api plugin.API) {
 	time.Sleep(time.Second * time.Duration(10))
 
 	api.LogDebug("Starting Post Generation...")
-	s.createMessages(api, channel.Id, users)
+
+	for _, message := range s.Messages {
+		s.sendMessage(api, channel.Id, users, message)
+	}
+}
+
+func (s *Script) TriggerResponse(responseId, channelId, userId string, api plugin.API) error{
+	var response ScriptResponse
+	for _, tmpResponse := range s.Responses {
+		if tmpResponse.Id == responseId {
+			response = tmpResponse
+		}
+	}
+
+	if response.Id == "" {
+		return errors.New("response not found")
+	}
+
+	users := map[string]*model.User{}
+
+	for _, user := range s.Users {
+		systemUser, _ := api.GetUserByUsername(user.Id)
+		users[user.Id] = systemUser
+	}
+
+	return s.sendMessage(api, channelId, users, response.Message)
 }
 
 func (s *Script) sendScriptProlog(api plugin.API, channelId, botId, userId string) {
@@ -154,64 +180,63 @@ func (s *Script) sendScriptProlog(api plugin.API, channelId, botId, userId strin
 	api.CreatePost(post)
 }
 
-func (s *Script) createMessages(api plugin.API, channelId string, users map[string]*model.User) {
+func (s *Script) sendMessage(api plugin.API, channelId string, users map[string]*model.User, message ScriptMessage) error{
 
 	url := *api.GetConfig().ServiceSettings.SiteURL
+	post := &model.Post{}
+	post.ChannelId = channelId
+	post.Message = message.Text
+	var attachments []*model.SlackAttachment
+	for _, attachment := range message.Attachments {
+		slackAttachment := model.SlackAttachment{}
+		slackAttachment.Title = attachment.Title
+		slackAttachment.TitleLink = attachment.TitleLink
+		slackAttachment.AuthorName = attachment.AuthorName
+		slackAttachment.Color = attachment.Color
 
-	for _, message := range s.Messages {
-		post := &model.Post{}
-		post.ChannelId = channelId
-		post.Message = message.Message
-		var attachments []*model.SlackAttachment
-		for _, attachment := range message.Attachments {
-			slackAttachment := model.SlackAttachment{}
-			slackAttachment.Title = attachment.Title
-			slackAttachment.TitleLink = attachment.TitleLink
-			slackAttachment.AuthorName = attachment.AuthorName
-			slackAttachment.Color = attachment.Color
+		for _, field := range attachment.Fields {
+			slackAttachment.Fields = append(slackAttachment.Fields, &model.SlackAttachmentField{
+				Title: field.Title,
+				Value: field.Value,
+				Short: field.Short,
+			})
+		}
 
-			for _, field := range attachment.Fields {
-				slackAttachment.Fields = append(slackAttachment.Fields, &model.SlackAttachmentField{
-					Title: field.Title,
-					Value: field.Value,
-					Short: field.Short,
-				})
-			}
-
-			for _, action := range attachment.Actions {
-				slackAttachment.Actions = append(slackAttachment.Actions, &model.PostAction{
-					Name: action.Name,
-					Integration: &model.PostActionIntegration{
-						URL: url + "/plugins/com.dschalla.matterdemo-plugin/trigger_response",
-						Context: map[string]interface{}{
-							"response_id": action.ResponseId,
-							"script_id": s.Id,
-						},
+		for _, action := range attachment.Actions {
+			slackAttachment.Actions = append(slackAttachment.Actions, &model.PostAction{
+				Name: action.Name,
+				Integration: &model.PostActionIntegration{
+					URL: url + "/plugins/com.dschalla.matterdemo-plugin/trigger_response",
+					Context: map[string]interface{}{
+						"response_id": action.ResponseId,
+						"script_id": s.Id,
 					},
-				})
-			}
-			attachments = append(attachments, &slackAttachment)
+				},
+			})
 		}
-
-		post.AddProp("attachments", attachments)
-
-		tmpUser, ok := users[message.UserId]
-		if !ok {
-			api.LogDebug("User " + message.UserId + " not found!")
-			continue
-		}
-		post.UserId = tmpUser.Id
-
-		for _, tmpBots := range s.Users {
-			if message.UserId == tmpBots.Id && tmpBots.Bot {
-				post.AddProp("from_webhook", "true")
-				break
-			}
-		}
-
-		api.CreatePost(post)
-		time.Sleep(time.Second * time.Duration(message.PostDelay))
+		attachments = append(attachments, &slackAttachment)
 	}
+
+	post.AddProp("attachments", attachments)
+
+	tmpUser, ok := users[message.UserId]
+	if !ok {
+		api.LogDebug("User " + message.UserId + " not found!")
+		return errors.New("user not found in users map")
+	}
+	post.UserId = tmpUser.Id
+
+	for _, tmpBots := range s.Users {
+		if message.UserId == tmpBots.Id && tmpBots.Bot {
+			post.AddProp("from_webhook", "true")
+			break
+		}
+	}
+
+	api.CreatePost(post)
+	time.Sleep(time.Second * time.Duration(message.PostDelay))
+
+	return nil
 }
 
 func LoadScriptsFromFile(filepath string) ([]Script, error) {
