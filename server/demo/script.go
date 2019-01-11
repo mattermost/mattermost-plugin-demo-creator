@@ -39,7 +39,9 @@ type ScriptMessage struct {
 	UserId      string `yaml:"user_id"`
 	Text        string
 	Attachments []ScriptAttachment
+	Reactions   []ScriptReaction
 	PostDelay   int `yaml:"post_delay"`
+	Replies		[]ScriptMessage
 }
 
 type ScriptAttachment struct {
@@ -61,6 +63,12 @@ type ScriptAttachmentField struct {
 type ScriptAttachmentAction struct {
 	Name       string
 	ResponseId string `yaml:"response_id"`
+}
+
+type ScriptReaction struct {
+	Id     string
+	UserId string `yaml:"user_id"`
+	Delay  int
 }
 
 type ScriptResponse struct {
@@ -137,11 +145,11 @@ func (s *Script) RunScript(teamId, botId, userId string, api plugin.API) {
 	api.LogDebug("Starting Post Generation...")
 
 	for _, message := range s.Messages {
-		s.sendMessage(api, channel.Id, users, message)
+		s.sendMessage(api, channel.Id, users, message, "")
 	}
 }
 
-func (s *Script) TriggerResponse(responseId, channelId, userId string, api plugin.API) error{
+func (s *Script) TriggerResponse(responseId, channelId, userId string, api plugin.API) error {
 	var response ScriptResponse
 	for _, tmpResponse := range s.Responses {
 		if tmpResponse.Id == responseId {
@@ -160,7 +168,7 @@ func (s *Script) TriggerResponse(responseId, channelId, userId string, api plugi
 		users[user.Id] = systemUser
 	}
 
-	return s.sendMessage(api, channelId, users, response.Message)
+	return s.sendMessage(api, channelId, users, response.Message, "")
 }
 
 func (s *Script) sendScriptProlog(api plugin.API, channelId, botId, userId string) {
@@ -180,12 +188,13 @@ func (s *Script) sendScriptProlog(api plugin.API, channelId, botId, userId strin
 	api.CreatePost(post)
 }
 
-func (s *Script) sendMessage(api plugin.API, channelId string, users map[string]*model.User, message ScriptMessage) error{
+func (s *Script) sendMessage(api plugin.API, channelId string, users map[string]*model.User, message ScriptMessage, rootId string) error {
 
 	url := *api.GetConfig().ServiceSettings.SiteURL
 	post := &model.Post{}
 	post.ChannelId = channelId
 	post.Message = message.Text
+	post.RootId = rootId
 	var attachments []*model.SlackAttachment
 	for _, attachment := range message.Attachments {
 		slackAttachment := model.SlackAttachment{}
@@ -209,7 +218,7 @@ func (s *Script) sendMessage(api plugin.API, channelId string, users map[string]
 					URL: url + "/plugins/com.dschalla.matterdemo-plugin/trigger_response",
 					Context: map[string]interface{}{
 						"response_id": action.ResponseId,
-						"script_id": s.Id,
+						"script_id":   s.Id,
 					},
 				},
 			})
@@ -233,10 +242,45 @@ func (s *Script) sendMessage(api plugin.API, channelId string, users map[string]
 		}
 	}
 
-	api.CreatePost(post)
+	post, err := api.CreatePost(post)
+
+	if err != nil {
+		return errors.New("error creating post")
+	}
+
+	go s.createReactions(api, post.Id, message.Reactions)
+
 	time.Sleep(time.Second * time.Duration(message.PostDelay))
 
+	for _, reply := range message.Replies {
+		s.sendMessage(api, channelId, users, reply, post.Id)
+	}
+
 	return nil
+}
+
+func (s *Script) createReactions(api plugin.API, postId string, reactions []ScriptReaction) {
+	for _, reaction := range reactions {
+		go func(reaction ScriptReaction){
+
+			user, err := api.GetUserByUsername(reaction.UserId)
+			if err != nil {
+				api.LogWarn("Error getting user for reaction: " + err.Message)
+				return
+			}
+
+			if reaction.Delay != 0 {
+				time.Sleep(time.Second * time.Duration(reaction.Delay))
+			}
+
+			r := &model.Reaction{
+				UserId: user.Id,
+				PostId: postId,
+				EmojiName: reaction.Id,
+			}
+			api.AddReaction(r)
+		}(reaction)
+	}
 }
 
 func LoadScriptsFromFile(filepath string) ([]Script, error) {

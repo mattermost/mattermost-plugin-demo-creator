@@ -32,13 +32,16 @@ scripts:
 
       Issue Severity S1 (Immediate response required)
     post_delay: 6
-  - user_id: systembot
-    text: >
-      ### Critical Security Issue Identified
-
-
-      Issue Severity S1 (Immediate response required)
-    post_delay: 6
+    reactions:
+      - user_id: dhuber
+        id: thumbsup
+      - user_id: lcosta
+        id: thumbsup
+        delay: 3
+    replies:
+    - user_id: dhuber
+      text: >
+        I'm on it!
   - user_id: demobot
     text: >
       ### Interactive Messages
@@ -226,10 +229,5 @@ scripts:
           #00ff00
         author_name: ZenDesk
         text: Incident closed as false positive
-
-        - user_id: incidentbot
-          text: >
-            InfraFXServerHostBot:
-            HA Cluster - Server 1: Server is started
   - user_id: incidentbot
     text: >
