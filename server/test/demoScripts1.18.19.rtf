@@ -1,0 +1,926 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf200
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 scripts:\
+- id: incident_response\
+  name: Incident Response\
+  priority: 3\
+  description: >\
+    **Description:** Time is crucial in a incident response scenario.  Automatic channel creation and notifications ensure response is immediate.  Within minutes the team can be alerted of the issue, review background logs and resources and update the issue tracking system with progress.  \
+    Resolution times are shortened by removing coordination of resources.  Tracking issue response and resolution activities help the team become more efficient in the future and allow a larger audience to keep current with updates. \
+\
+    **Audience:** DevOps, InfoSec\
+\
+    **Length:** 3 minutes\
+  channel:\
+    id: incident_response\
+    name: Incident Response\
+    description: >\
+      Issue: #1231 - Serverity: S1 - Opened at 2019/01/04 16:32\
+  users:\
+    - id: demobot\
+    name: Mattermost Demo Bot\
+    bot: true\
+  - id: dhuber\
+    name: Draven Huber\
+    position: Network Admin\
+  - id: mnorris\
+    name: Moriah Norris\
+    position: Network Engineer\
+  - id: rholloway\
+    name: Ronan Holloway\
+    position: Security Engineer\
+  - id: choffman\
+    name: Cordell Hoffman\
+    position: Network Manager\
+  - id: incidentbot\
+    name: PaloAltoBank Incident Bot\
+    bot: true\
+  - id: threatbot\
+    name: Email Threat Bot\
+    bot: true\
+  - id: zendesk\
+    name: PaloAltoBank ZenDesk Bot\
+    bot: true\
+    messages:\
+  - user_id: demobot\
+    text: >\
+     Time is crucial in a incident response scenario.  Automatic channel creation and notifications ensure response is immediate.  Within minutes the team can be alerted of the issue, review background logs and resources and update the issue tracking system with progress.  Resolution times are shortened by removing the effort required to coordinate resources.  Tracking issue response and resolution activities help the team become more efficient in the future and allow a larger audience to keep current with updates.\
+    post_delay: 25 \
+  - user_id: incidentbot\
+    text: >\
+      ### ### Email Received - Suspected Phishing Attempt\
+\
+      Header Parsed: \
+      ```MIME-Version: 1.0\
+      Date: Fri, 18 Jan 2019 14:32:06 -0400\
+      Message-ID: <CAEroB_23tG5AFsYCvpG9atbGCmqhPeEAa2FNpm9zgyx5pZB3NQ@mail.gmail.com>\
+      Subject: Check this out!\
+      From: Selena Adams<ceoxxo@.com>\
+      To: <ariella.hess@paloaltobank.org>\
+      Content-Type: multipart/alternative; boundary="000000000000753ba0057fbfbae5"\
+\
+      --000000000000753ba0057fbfbae5\
+      Content-Type: text/plain; charset="UTF-8"\
+\
+      This is a really neat thing.  Please make sure you read this link <.http://ceoxxo.com/> and let\'92s chat about it when you have a moment.\
+\
+      Sincerely,  \
+      Selena Adams```\
+\
+    post_delay: 3\
+  - user_id: zendesk\
+    text: >\
+      Case Created in Zendesk.  [Zendesk Issue #12345](http://zendesk.com).  SLA Assigned: S3: 12 hours to response.\
+    post_delay: 3  \
+  - user_id: threatbot\
+    attachments:\
+    - title: >\
+        Threat Confirmed\
+      titleLink: http://zendesk.com/12345\
+      color: >\
+        #ff0000\
+      author_name: Email Threat Bot\
+      fields:\
+      - title: No#\
+        value: 12345\
+        short: True\
+      - title: Severity\
+        value: S3\
+        short: True\
+      actions:\
+      - name: Add Domain to Blacklist\
+        response_id: response_1\
+      - name: Close Incident as False Positive\
+    post_delay: 11\
+  - user_id: dhuber\
+    text: >\
+      Received the notification-I\'92m on the road, @mnorris can you take a look?\
+    post_delay: 15 \
+    replies:\
+    - user_id: mnorris\
+      text: >\
+        This is an odd one. Seems Selena has been a target a few times this month, I\'92ve checked the proxy logs and confirmed that she didn\'92t open the URL.\
+      post_delay: 13\
+    - user_id: rholloway\
+      text: >\
+        This could be part of an ongoing scheme. I\'92ve found references to that domain on various analysis websites for phishing schemes.\
+      post_delay: 18 \
+  - user_id: rholloway\
+      text: >\
+        Looks similar to a phishing email received recently by Steve from Finance.\
+      post_delay: 12 \
+    responses:\
+  - id: response_1\
+    message:\
+      user_id: threatbot\
+      text: >\
+        ### Added Blacklist Entry:  ```ceoxxo@.com```\
+  - user_id: dhuber\
+    text: >\
+      @mnorris send a reminder to everyone on procedure for phishing attacks\
+    post_delay: 15 \
+        reactions:\
+      - user_id: choffman\
+        id: thumbsup\
+        delay: 3\
+    replies:\
+    - user_id: mnorris\
+      text: >\
+        Yes good idea - I will distribute and follow up with managers to make sure they review the procedures with their teams.  \
+     post_delay: 15 \
+  - user_id: mnorris\
+      text: >\
+         Good work, guys! Thanks for the quick response and resolution.\
+      post_delay: 6\
+  - user_id: zendesk\
+      text: >\
+        [Zendesk Issue #12345](http://zendesk.com) marked closed.  Time to Close = 3 minutes.  S3 SLA Resolution time met.  \
+\
+        This channel will be automatically archived after 30 days.  A transcript of this issue has been attached to the [Zendesk Issue #12345](http://zendesk.com). \
+      post_delay: 5\
+  - user_id: demobot\
+    text: >\
+      Please choose another live demo workflow from the \'91Town Square\'92 channel.  [Click here](www.mattermost.com/trial)if you are interested in a trial.\
+\
+======================================================================================================\
+\
+- id: development\
+  name: Development\
+  priority: 4\
+  description: >\
+    **Description:** Product development and release management can include many different resources and processes.  Managing tasks and cross-departmental collaboration requires coordination and abundant information sharing. \
+    Mattermost provides a variety of methods to help facilitate clear communications in defined and ad hoc processes.\
+    \
+    **Audience:** R&D, Project Management\
+\
+    **Length:** 4 minutes \
+  channel:\
+    id: development\
+    name: Development\
+    description: >\
+      Ready, Set, Release! Tracking of release processes for the product development team of Palo Alto.\
+  users:\
+    - id: demobot\
+    name: Mattermost Demo Bot\
+    bot: true\
+  - id: cholder\
+    name: Caden Holder\
+    position: DevOps Engineer\
+  - id: sbowen\
+    name: Savion Bowen\
+    position: Developer\
+  - id: cberry\
+    name: Cruz Berry\
+    position: Developer\
+  - id: gjackson\
+    name: Gregory Jackson\
+    position: Developer Lead\
+  - id: aharrington\
+    name: Alana Harrington\
+    position: Product Manager\
+  - id: eparker\
+    name: Enzo Parker\
+    position: Release Manager\
+  - id: klin\
+    name: Kiersten Lin\
+    position: Marketing Manager\
+  - id: llloyd\
+    name: Laurell Lloyd\
+    position: Quality Assurance\
+  - id: releasebot\
+    name: Release Bot\
+    bot: true\
+    messages:\
+  - user_id: demobot\
+    text: >\
+      Product development and release management can include many different resources and processes.  Managing tasks and cross-departmental collaboration requires coordination and abundant information sharing. Mattermost provides a variety of methods to help facilitate clear communications in defined and ad hoc processes.\
+    post_delay: 25 \
+  - user_id: eparker\
+    text: >\
+	    Hey @all reminder that today is Release Day!  Please review the checklist below for your outstanding tasks: \
+\
+	    ### (T-minus 0 working days) Release Day\
+      1. **Release Manager:**\
+      - ~~Post this checklist in Release Checklist channel~~\
+      - Verify all items in the last posted release checklist are complete, if not alert the release manager\
+      - ~~Schedule a release retrospective meeting, to be held within 5 days from the release~~\
+      - Prepare and post release metrics\
+      - ~~Review and update [company roadmap](https://mattermost.com/roadmap/) with which major features made it into the release~~\
+      - ~~Close the release in Jira~~\
+      - ~~Make sure that statutory holidays for Canada and US are accounted for in the release dates~~\
+      - ~~Check for any [UserVoice feature](https://mattermost.uservoice.com/forums/306457-general) suggestions that were completed in the current release~~\
+      - ~~Find the release tweet and insert a link to the tweet next to the feature that shipped with the release~~\
+      - ~~For the next release, create the following team meetings. If they conflict with existing meetings, check with meeting owner to reschedule or reschedule the release meeting~~\
+      - Feature Complete Meeting on T-15 at 10:00 am San Francisco time\
+      - Judgment Day Meeting on T-13 at 10:00 am San Francisco time\
+      - Code Complete Meeting on T-12 at 10:00 am San Francisco time\
+      - Release Triage and Update Meeting each weekday starting at T-13 and ending at T-2 at 9:30am San Francisco time for PM, QA and release dev.\
+      - ~~Prepare tickets for the next release, with a corresponding vX.X prefix, and put the tickets in the appropriate sprints as follows:~~\
+        - The week RC is cut:\
+        - RC Build Testing for core team\
+        - The week RC is cut:\
+        - Loadtest x.x release candidate compared to x.x release\
+        - Release week\
+        - Upgrade dependencies\
+      2. **QA:**\
+      - Verify all PRs and tickets for the release have been tested / closed\
+      - Verify smoke tests on platform and apps all passed\
+      - Post QA approval\
+      3. **PM Docs:**\
+      - Create a new branch on docs for the next release - vX.X-documentation\
+      - Submit a PR for changelog against the vX.X-documentation branch and add a Work in Progress label for it\
+      4. **Dev Ops:**\
+      - Tag new release and run an official build\
+      - Post signatures of the final build\
+      - Put CI servers back onto master, and post once done\
+      5. **Dev:**\
+      - Confirm app is updated to final build\
+      - Update existing tickets or create new ones for the next release\
+      6. **Marketing:**\
+      - Confirm marketing has been posted (animated GIFs, screenshots, mail announcement, tweets, blog posts)\
+      - Update Twitter profile with the next release date\
+    post_delay: 8   \
+    replies:\
+    - user_id: aharrington\
+      text: >\
+        New documentation branch and PR for the changelog has been created. \
+      post_delay: 18   \
+    - user_id: llloyd\
+      text: >\
+        I have verified all tickets have been tested and closed. Smoke tests are being completed right now.\
+      post_delay: 10    \
+    - user_id: llloyd\
+      text: >\
+       Smoke tests completed.  QA gives final approval :white_check_mark:\
+      post_delay: 7\
+    - user_id: cholder\
+      text: >\
+       Cutting final :tada:\
+      post_delay: 6  \
+    - user_id: klin\
+      text: >\
+        Marketing has been confirmed - all posts are publically available.  Twitter has been updated. \
+      post_delay: 18   \
+    - user_id: cholder\
+      text: >\
+        My task is complete. CI servers now are on master.\
+      post_delay: 7            \
+    - user_id: gjackson\
+      text: >\
+        - [x] Confirm app is updated to final build\
+        - [x] Update existing tickets or create new ones for the next release\
+      post_delay: 6  \
+ - user_id: aharrington\
+    text: >\
+      There have been two separate reports by customers of broken file uploads.  I haven\'92t been able to reproduce, but I think we need to check into this ASAP to make sure there is not something that was introduced in this last release. \
+\
+      @QA, can you please help try to reproduce the issue? Here are some JS Errors one customer reported and here is a full stack trace from the other report \
+\
+      Errors:\
+\
+      JS Errors: ```2018-12-16T17:13:40.107-0600    error    web/context.go:60    msg: Uncaught TypeError: Cannot read property \'91toFixed\'92 of undefined row: 36 col: 79222 stack: TypeError: Cannot read property \'91toFixed\'92 of undefined url: https://host.example.com/static/main.495bc49800ee9aa7d2f3.js    \{\'93path\'94: \'93/api/v4/logs\'94, \'93request_id\'94: \'931snjgfwwx3yq9xhppx6eaqrhac\'94, \'93ip_addr\'94: \'93192.168.10.115\'94, \'93user_id\'94: \'936w9cdk4adprj3fjprgtzesbt7h\'94, \'93method\'94: \'93POST\'94, \'93err_where\'94: \'93client\'94, \'93http_code\'94: 0, \'93err_details\'94: \'93\'94\}```\
+\
+      Stack Trace: \
+      ```react-dom.production.min.js:171 TypeError: Cannot read property 'toFixed' of undefined\
+      at t.value (file_progress_preview.jsx:31)\
+      at Ka (react-dom.production.min.js:156)\
+      at Qa (react-dom.production.min.js:155)\
+      at $a (react-dom.production.min.js:162)\
+      at Oi (react-dom.production.min.js:192)\
+      at Ii (react-dom.production.min.js:193)\
+      at co (react-dom.production.min.js:205)\
+      at uo (react-dom.production.min.js:204)\
+      at Ui (react-dom.production.min.js:200)\
+      at Object.enqueueSetState (react-dom.production.min.js:130)\
+      ai @ react-dom.production.min.js:171\
+      n.callback @ react-dom.production.min.js:179\
+      ra @ react-dom.production.min.js:125\
+      na @ react-dom.production.min.js:125\
+      lo @ react-dom.production.min.js:214\
+      co @ react-dom.production.min.js:205\
+      uo @ react-dom.production.min.js:204\
+      Ui @ react-dom.production.min.js:200\
+      enqueueSetState @ react-dom.production.min.js:130\
+      g.setState @ react.production.min.js:13\
+      (anonymous) @ create_post.jsx:622\
+      (anonymous) @ file_upload.jsx:272\
+      a.emit @ index.js:133\
+      a @ client.js:714\
+      XMLHttpRequest.send (async)\
+      _._end @ client.js:772\
+      _.end @ client.js:676\
+      f @ file_upload.jsx:280\
+      (anonymous) @ file_upload.jsx:251\
+      (anonymous) @ file_upload.jsx:236\
+      (anonymous) @ file_upload.jsx:334\
+      (anonymous) @ react-dom.production.min.js:14\
+      f @ react-dom.production.min.js:15\
+      (anonymous) @ react-dom.production.min.js:15\
+      A @ react-dom.production.min.js:17\
+      O @ react-dom.production.min.js:18\
+      P @ react-dom.production.min.js:18\
+      C @ react-dom.production.min.js:18\
+      L @ react-dom.production.min.js:21\
+      Tn @ react-dom.production.min.js:84\
+      po @ react-dom.production.min.js:216\
+      Fe @ react-dom.production.min.js:39\
+      On @ react-dom.production.min.js:86\
+      react-dom.production.min.js:204 Uncaught TypeError: Cannot read property 'toFixed' of undefined\
+      at t.value (file_progress_preview.jsx:31)\
+      at Ka (react-dom.production.min.js:156)\
+      at Qa (react-dom.production.min.js:155)\
+      at $a (react-dom.production.min.js:162)\
+      at Oi (react-dom.production.min.js:192)\
+      at Ii (react-dom.production.min.js:193)\
+      at co (react-dom.production.min.js:205)\
+      at uo (react-dom.production.min.js:204)\
+      at Ui (react-dom.production.min.js:200)\
+      at Object.enqueueSetState (react-dom.production.min.js:130)```\
+    post_delay: 6  \
+    replies:\
+    - user_id: llloyd\
+      text: >\
+        Of course.  \
+      post_delay: 20   \
+    - user_id: llloyd\
+      text: >\
+        Ok, I was able to reproduce and here is what I found: \
+\
+        Issue is a regression- it was not an issue in the previous release. Here are the files I tested with: \
+\
+|       Attachment File Type  | Pass or Fail | \
+|       :----------------------------- |:---------------:| \
+|       .pdf | ![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg =25 "Failed")|  \
+|       .txt |![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg =25 "Failed")|\
+|       .docx|![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg =25 "Failed")|\
+|       .pptx |![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg  =25 "Failed") |\
+  \
+        Which dev worked last on this area?  Can they pinpoint where this issue was introduced? \
+ - user_id: aharrington\
+    text: >\
+      Thank you so much for your quick response @llloyd.  @sbowen, I think you were working on this feature?  I have created a ticket to track the work.     \
+    post_delay: 6   \
+ - user_id: sbowen\
+    text: >\
+      Yes, bummer.  That is something I worked on.  I will get a PR submitted for a fix in the next hour or so.    \
+    post_delay: 6   \
+ - user_id: aharrington\
+    text: >\
+      Great.  I think we will need to put out a dot release.  This is a core area of the app that could be really frustrustating for a lot of users if we don\'92t address right away.    \
+      cc://@eparker\
+    post_delay: 6\
+    replies:\
+    - user_id: sbowen\
+      text: >\
+        On it. \
+      post_delay: 30    \
+ - user_id: sbowen\
+    text: >\
+      Fix has been submitted.  Can I get a review quick from my other devs?\
+    post_delay: 6  \
+    replies:\
+    - user_id: gjackson\
+      text: >\
+        Looks good.  Wondering about your logic here, but I can queue for our developer\'92s conversation later in the week.\
+\
+        ``` go\
+        export function trimFilename(filename) \{\
+        let trimmedFilename = filename;\
+        if (filename.length > Constants.MAX_FILENAME_LENGTH) \{\
+        trimmedFilename = filename.substring(0, Math.min(Constants.MAX_FILENAME_LENGTH, filename.length)) + '...';\
+        \}\
+\
+        return trimmedFilename;\
+        \}\
+        ```\
+      post_delay: 23 \
+    - user_id: cberry\
+      text: >\
+        Looks good to me as well.      \
+      post_delay: 30  \
+ - user_id: eparker\
+    text: >\
+      ### Dot Release\
+      @channel Here is the checklist for this dot release.  Let me know when you have your items addressed: \
+\
+      1. Release Manager:\
+      - Once the list of bugs to be fixed is finalized, post this checklist in Release Checklist channel\
+      - Notify customer success about upcoming dot release\
+      2. Dev:\
+      - PRs for hotfixes are made to release branch\
+      - Review PRs made from release branch and merge changes into the release branch as required and merge the release branch back into master once per day\
+      3. DevOps\
+      - Verify with Release Manager before cutting any new dot release RCs (approved fixes should be merged)\
+      4. QA:\
+      - Test the new release cut to verify fixes merged to the release branch work\
+      - Post in Release Discussion channel after testing\
+      5. Marketing:\
+      - Prepare blog post for mattermost.com and Twitter announcement, and send to PM to review.     post_delay: 6  \
+ - user_id: demobot\
+    text: >\
+      Please choose another live demo workflow from the \'91Town Square\'92 channel.  [Click here](www.mattermost.com/trial)if you are interested in a trial. \
+\
+========================================================================================================\
+\
+- id: monitoring\
+  name: Monitoring\
+  priority: 2\
+  description: >\
+    Description: Keeping a pulse on real-time activities of your environment is key to keeping it running smoothly and maintaining uptime.  In the monitoring channel, hooks into crucial systems post a heartbeat to make reviewing easy and convenient.  Alerts allow the team to take action before issues arise.\
+  channel:\
+    id: monitoring\
+    name: Monitoring\
+    description: >\
+      AWS Tracking\
+    - id: demobot\
+    name: Mattermost Demo Bot\
+    bot: true\
+  - id: emaxwell\
+    name: Eduardo Maxwell\
+    position: Network Admin \
+  - id: sray\
+    name: Santiago Ray\
+    position: Network Admin\
+  - id: jbanks\
+    name: Jacob Banks\
+    position: Network Admin\
+  - id: statusbot\
+    name: AWS Status Bot\
+    bot: true\
+  - id: authenticationbot\
+    name: Authentication Bot\
+    bot: true\
+  - id: billingbot\
+    name: AWS Billing Bot\
+    bot: true\
+    messages:\
+  - user_id: demobot\
+    text: >\
+      Keeping a pulse on real-time activities of your environment is key to keeping it running smoothly and maintaining uptime.  In the monitoring channel, hooks into crucial systems post a heartbeat to make reviewing easy and convenient.  Alerts allow the team to take action before issues arise.\
+    post_delay: 25 \
+  - user_id: statusbot\
+    text: >\
+      ## System Health Status HA Server 1:  \
+      - System Status:  OK\
+      - Instance Status:  Running\
+      - CPU Utilization:  Average: 1.06%, Minimum: 0.00%, Maximum: 15.22%\
+      - Memory Utilization:  Average: 6.84%, Minimum: 6.82%, Maximum: 6.89%\
+      - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A\
+      - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%\
+\
+      [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)\
+\
+      #aws-status-check #ha-server-1\
+    post_delay: 8   \
+  - user_id: statusbot\
+    text: >\
+      ## System Health Status HA Server 2:  \
+      - System Status:  OK\
+      - Instance Status:  Running\
+      - CPU Utilization:  Average: 1.08%, Minimum: 0.00%, Maximum: 14.22%\
+      - Memory Utilization:  Average: 5.42%, Minimum: 5.40%, Maximum: 5.47%\
+      - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A\
+      - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%\
+\
+      [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)\
+\
+      #aws-status-check #ha-server-2\
+    post_delay: 8 \
+  - user_id: authenticationbot\
+    text: >\
+      # Authentication Error Reported on: Prometheus.io \
+      #authentication-error \
+    post_delay: 8 \
+    replies:\
+    - user_id: emaxwell\
+      text: >\
+        This was me- used an old password to review our Prometheus Monitoring Dashboard.  This system\'92s being upgraded to SSO so shouldn\'92t be a recurring issue.   \
+    reactions:\
+      - user_id: sray\
+        id: thumbsup\
+      - user_id: jbanks\
+        id: thumbsup\
+        delay: 3\
+  - user_id: statusbot\
+    text: >\
+      ## System Health Status HA Server 1:  \
+      - System Status:  OK\
+      - Instance Status:  Running\
+      - CPU Utilization:  Average: 1.06%, Minimum: 0.00%, Maximum: 15.22%\
+      - Memory Utilization:  Average: 6.84%, Minimum: 6.82%, Maximum: 6.89%\
+      - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A\
+      - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%\
+\
+      [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)\
+\
+      #aws-status-check #ha-server-1\
+    post_delay: 8   \
+  - user_id: statusbot\
+    text: >\
+      ## System Health Status HA Server 2:  \
+      - System Status:  OK\
+      - Instance Status:  Running\
+      - CPU Utilization:  Average: 1.08%, Minimum: 0.00%, Maximum: 14.22%\
+      - Memory Utilization:  Average: 5.42%, Minimum: 5.40%, Maximum: 5.47%\
+      - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A\
+      - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%\
+\
+      [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)\
+\
+      #aws-status-check #ha-server-2\
+    post_delay: 8 \
+ - user_id: billingbot\
+    text: >\
+      New Billing Alarm: AWS Service Charge (Total) \
+      #aws-billing-alarm\
+    post_delay: 6\
+    replies:\
+    - user_id: emaxwell\
+      text: >\
+        Looks like we are getting close to the limit we set on the Data Transfer Service for AWS. Probably need to review our budget allocation @sray, @jbanks.\
+      post_delay: 11\
+    - user_id: sray\
+      text: >\
+        What\'92s our next step to make sure we get this back to where we need to be? \
+      post_delay: 19    \
+    - user_id: sbowen\
+      text: >\
+         A reallocation of the S3s should get us back to our utilization comfort zone. In our next meeting let\'92s get a plan for sketched out for identifying testing and other usage that can be reassigned to our production environments. \
+      post_delay: 30  \
+  - user_id: statusbot\
+    text: >\
+      ## System Health Status HA Server 1:  \
+      - System Status:  OK\
+      - Instance Status:  Running\
+      - CPU Utilization:  Average: 1.06%, Minimum: 0.00%, Maximum: 15.22%\
+      - Memory Utilization:  Average: 6.84%, Minimum: 6.82%, Maximum: 6.89%\
+      - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A\
+      - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%\
+\
+      [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)\
+\
+      #aws-status-check #ha-server-1\
+    post_delay: 8   \
+  - user_id: statusbot\
+    text: >\
+      ## System Health Status HA Server 2:  \
+      - System Status:  OK\
+      - Instance Status:  Running\
+      - CPU Utilization:  Average: 1.08%, Minimum: 0.00%, Maximum: 14.22%\
+      - Memory Utilization:  Average: 5.42%, Minimum: 5.40%, Maximum: 5.47%\
+      - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A\
+      - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%\
+\
+      [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)\
+\
+      #aws-status-check #ha-server-2\
+    post_delay: 8 \
+ - user_id: demobot\
+    text: >\
+      Please choose another live demo workflow from the \'91Town Square\'92 channel.  [Click here](www.mattermost.com/trial)if you are interested in a trial.  - user_id: demobot\
+\
+========================================================================================================\
+\
+  - id: initialization\
+  name: Initialization\
+  priority: 1\
+  description: >\
+    **Description:** The initialization channel features logs for the set up of this demo instance environment.  A high availability cluster enables a Mattermost system to maintain service during outages and hardware failures through the use of redundant infrastructure. Failure of any one of these components does not interrupt operation of the system.  \
+    For large scale deployments, a hardware proxy with dedicated devices for processing SSL encryption and decryption are recommended.  In a high availability configuration the proxy balances network load across multiple Mattermost servers.\
+    \
+    **Audience:** Network Administration, InfoSec\
+\
+    **Length:** 2 minutes \
+  channel:\
+    id: initialization\
+    name: Initialization\
+    description: >\
+      This channel features logs events of the initialization of this live demo system. [Learn more about deploying Mattermost](https://docs.mattermost.com/deployment/deployment.html)\
+  users:\
+    - id: demobot\
+    name: Mattermost Demo Bot\
+    bot: true\
+  - id: serverinitializationbot\
+    name: Server Initialization Bot\
+    bot: true\
+    messages:\
+  - user_id: demobot\
+    text: >\
+      The initialization channel features logs for the set up of this demo instance environment.  A high availability cluster enables a Mattermost system to maintain service during outages and hardware failures through the use of redundant infrastructure. Failure of any one of these components does not interrupt operation of the system.  \
+\
+      For large scale deployments, a hardware proxy with dedicated devices for processing SSL encryption and decryption are recommended.  In a high availability configuration the proxy balances network load across multiple Mattermost servers.\
+    post_delay: 25 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 1: Server is started\
+    post_delay: 3   \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 2: Server is started\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 1: Server is listening on [::]:8065\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 2: Server is listening on [::]:8065\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 1: Pinging SQL master database\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 2: Pinging SQL master database\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 1: Current version is 5.7.0\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 2: Current version is 5.7.0\
+    post_delay: 3    \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 1: Enterprise Enabled: true\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 2: Enterprise Enabled: true\
+    post_delay: 3\
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 1: Loaded config file from .../mattermost/config/config.json\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 2: Loaded config file from .../mattermost/config/config.json\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 1: License key valid unlocking enterprise features\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 2: License key valid unlocking enterprise features\
+    post_delay: 3\
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 1: Starting up plugins\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 2: Starting up plugins\
+    post_delay: 3   \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 1: Starting 4 websocket hubs\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 2: Starting 4 websocket hubs\
+    post_delay: 3    \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 1: Metrics and profiling server is listening on :8067\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 2: Metrics and profiling server is listening on :8067\
+    post_delay: 3  \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 1: Starting workers\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 2: Starting workers\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 1: Starting schedulers\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 2: Starting schedulers\
+    post_delay: 3\
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 1: SSL Test Successful\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 2: SSL Test Successful\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 1: Email Test Successful\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 2: Email Test Successful\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 1: Found users with LDAP configured\
+    post_delay: 3 \
+  - user_id: serverinitializationbot\
+    text: >\
+     HA Cluster - Server 2: Found users with LDAP configured\
+    post_delay: 3              \
+ - user_id: demobot\
+    text: >\
+      Please choose another live demo workflow from the \'91Town Square\'92 channel.  [Click here](www.mattermost.com/trial)if you are interested in a trial. \
+\
+========================================================================================================\
+\
+  - id: miscellaneous\
+  name: Misc Movies\
+  priority: 5\
+  description: >\
+    **Description:** Having a place for \'93around the water cooler\'94 communication facilitates social interactions. When a team build comradery through shared interests, culture is built and people\'92s work environment is more enjoyable.\
+    \
+    **Audience:** Any team\
+\
+    **Length:** 2 minutes \
+  channel:\
+    id: miscellaneous\
+    name: Misc Movies\
+    description: >\
+      Water-cooler conversations around movies\
+  users:\
+    - id: demobot\
+    name: Mattermost Demo Bot\
+    bot: true\
+  - id: ledwards\
+    name: Lionel Edwards\
+    position: Loan Representative\
+  - id: zburch\
+    name: Zachariah Burch\
+    position: Lending Manager\
+  - id: mdavis\
+    name: Matt Davis\
+    position: Customer Service Representative\
+  - id: anelson\
+    name: Amy Nelson\
+    position: Consumer Credit Analyst\
+  messages:\
+  - user_id: demobot\
+    text: >\
+      Having a place for \'93around the water cooler\'94 communication facilitates social interactions. When a team build comradery through shared interests, culture is built and people\'92s work environment is more enjoyable. \
+    post_delay: 25 \
+  - user_id: ledwards\
+    text: >\
+      I'm trying to catch up on the Marvel series, but the last one I saw was Iron Man and I have no idea which ones to see next. Recommendations?\
+    post_delay: 8   \
+    replies:\
+    - user_id: mdavis\
+      text: >\
+        If you enjoy watching extraterrestrial stories, I'd recommend watching of Guardians of the Galaxy. It's story circle around Peter Quill who forms an uneasy alliance with a group of extraterrestrial misfits who are fleeing after stealing a powerful artifact.\
+      post_delay: 3  \
+    - user_id: mdavis\
+      text: >\
+        You may start watching Vol. 1 of 2014.\
+      post_delay: 10    \
+    - user_id: ledwards\
+      text: >\
+       Thanks for the recommendation! That's the movie with the "tree character", right? Vin Diesel plays his voice?\
+      post_delay: 7\
+ - user_id: zburch\
+    text: >\
+      https://media.giphy.com/media/3o7budMRwZvNGJ3pyE/giphy.gif \
+\
+      Groot!  Yes the first one has big groot, but the 2nd Guardians has Baby Groot & Teenager Groot at the end.  Best character in both movies!\
+    post_delay: 6  \
+ - user_id: ledwards\
+    text: >\
+        I feel like I'm missing some backstory here. Iron Man -> outer space? How did that happen? Or is this movie an anomaly in the Marvel universe?  \
+    post_delay: 11  \
+ - user_id: zburch\
+    text: >\
+      All part of the marvel *universe*\
+    post_delay: 6\
+    replies:\
+    - user_id: mdavis\
+      text: >\
+        Hmmm, it made me think of it as well. My quick search tells me that back in the days, it's initially about super-guerillas fighting against Russians and Chinese who had taken over the USA, and then later on the author decided to change it into interplanetary situation.\
+        It's unusual setting for Marvels, though.\
+      post_delay: 5    \
+    - user_id: anelson\
+      text: >\
+        Ah, I love that movie!\
+      post_delay: 13 \
+ - user_id: anelson\
+    text: >\
+      Here's one of my favorite Marvel moments: https://media.giphy.com/media/3o7aDejLjaii0E4v2E/giphy.gif\
+    post_delay: 11\
+- user_id: anelson\
+    text: >\
+      ### Who do you think was the more clever villain? \
+      :space_invader: Thanos\
+      :japanese_ogre:  Red Skull \
+    post_delay: 6\
+    reactions:\
+      - user_id: zburch\
+        id: japanese_ogre\
+      - user_id: mdavis\
+        id: space_invader\
+        delay: 3\
+      - user_id: anelson \
+        id: japanese_ogre\
+        delay: 3          \
+ - user_id: demobot\
+    text: >\
+      Please choose another live demo workflow from the \'91Town Square\'92 channel.  [Click here](www.mattermost.com/trial)if you are interested in a trial.  - user_id: demobot\
+\
+========================================================================================================\
+\
+\
+========================================================================================================\
+\
+  - id: usingMM\
+  name: Using Mattermost\
+  priority: 6\
+  description: >\
+    **Description:** Wondering more about getting around and other features in Mattermost? This workflow provides posts to describe navigation and other features that may be of interest.  The demo bot will post instructions and resources to help you learn more. \
+    \
+    **Audience:** Any team\
+\
+    **Length:** 5 minutes \
+  channel:\
+    id: using_mattermost\
+    name: Using Mattermost\
+    description: >\
+      Some tips and information about using Mattermost\
+  users:\
+    - id: demobot\
+    name: Mattermost Demo Bot\
+    bot: true\
+    messages:\
+  - user_id: demobot\
+    text: >\
+      Wondering more about getting around and other features in Mattermost? This workflow provides posts to describe navigation and other features that may be of interest.  The demo bot will post instructions and resources to help you learn more. \
+    post_delay: 25 \
+   - user_id: demobot\
+    text: >\
+      # A Quick Guide to Mattermost Navigation\
+\
+      ## Channels \
+      TownSquare is a public channel that all users have access to. This channel can be made \'93read-only\'94 so that important announcements can be posted by System Administrators for all team members to see.  All users are also defaulted into the Off-Topic channel.  Additionally, you can configure other default channels if desired.  \
+\
+      ## Posts, Replies and Reactions\
+      Looking at the channel itself, you can see posts in the center. Scroll up to see earlier posts.  Each post has a little menu on the far right of the text allowing you to reply and react to the message as well.  Replying will open a window on the right hand side and reacting will apply an emoji under the post message.  You can reply from directly in the center channel or the right-hand side bar.  \
+\
+      Enter text and hit enter to post a message. Messages can be composed using markdown formatting to make the information stand out more or easier to read if posting code or by using a table. \
+\
+      ## Channel Header\
+      The top of the channel, the channel header, features the channel name, a description for what the channel is about and a drop down for taking more action within the channel. \
+\
+      ## Channel Members\
+      To the right of the channel header, you will see an icon representing channel members. Clicking on it shows you who is also in the channel. If you have permissions, you can also add and remove members from this menu. \
+\
+      ## Searching\
+      You can also search messages pinned for all to reference within the channel, search for content, view recent mentions with your name, and view messages that you have flagged for easier.  \
+\
+      ## Channel and Team organization\
+      Looking to the left of the center, you see that the left-hand area is made up of channels and direct messages. Channels can be public or private.  Direct messages can feature 1-1 discussion or group messages. To create channels use the \'93+\'94.  To  find channels, use the \'93More\'85\'94 button.  Further to the left, you will see multiple teams if you are a member of more than one.   \
+\
+      ## Main Menu\
+      Above the Channels, you are able to access the Main Menu in the hamburger dropdown. From your account settings you can manage your profile, customize your UI and set preferences for being notified in application or on your mobile devices. Depending on your permissions, you may have other options from this menu that allows you to manage teams, integrations and even the system (if you are a System Admin). \
+    post_delay: 90\
+ - user_id: demobot\
+    text: >\
+      ### Try it yourself\
+\
+      1. Post a message in the box below. Learn more about formatting messages [here](https://docs.mattermost.com/help/messaging/formatting-text.html). \
+      2. Flag messages for follow up by clicking the flag icon next to the message timestamp. Learn more about posts [here](https://docs.mattermost.com/help/getting-started/messaging-basics.html). \
+      3. Try a slash command.  Type ```/dnd``` and press ```Enter``` to change your status to \'93Do not disturb\'94.  Type ```/online``` and press ```Enter``` to change your status back to active. \
+      4. Create a private channel by clicking the \'93+\'94 sign next to the Private Channel heading to the left. \
+      5. Review your Account Settings from the Main Menu by clicking the three horizontal lines (or hamburger menu) at the top of the channel menu by your name. \
+    post_delay: 90\
+ - user_id: demobot\
+    text: >\
+      ### Learn more about these features\
+      - [Installation and deployment](https://docs.mattermost.com/deployment/deployment.html)\
+      - [Compliance](https://docs.mattermost.com/guides/administrator.html#mattermost-compliance)\
+      - [Security](https://docs.mattermost.com/overview/security.html) \
+      - [Onboarding users](https://docs.mattermost.com/administration/user-provisioning.html)\
+      - [Integrating workflow tools](https://about.mattermost.com/community-applications/)\
+      - [Enriching and customizing your experience](https://developers.mattermost.com/)\
+    post_delay: 90       \
+ - user_id: demobot\
+    text: >\
+      Please choose another live demo workflow from the \'91Town Square\'92 channel.  [Click here](www.mattermost.com/trial)if you are interested in a trial.  \
+\
+========================================================================================================\
+\
+\
+  \
+}

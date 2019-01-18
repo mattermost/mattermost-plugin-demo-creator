@@ -6,7 +6,7 @@ import (
 )
 
 func Test_LoadScriptsFromFile(t *testing.T) {
-	filepath := "../test/sample_script.yml"
+	filepath := "../test/demo_scripts.yml"
 	scripts, err := demo.LoadScriptsFromFile(filepath)
 
 	if err != nil {

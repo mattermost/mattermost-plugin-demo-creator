@@ -100,7 +100,7 @@ bundle:
 ifneq ($(HAS_SERVER),)
 	mkdir -p dist/$(PLUGIN_ID)/server/dist;
 	cp -r server/dist/* dist/$(PLUGIN_ID)/server/dist/;
-	cp server/test/sample_script.yml dist/$(PLUGIN_ID)/server/dist/script.yml;
+	cp server/test/demo_scripts.yml dist/$(PLUGIN_ID)/server/dist/script.yml;
 	cp server/test/mattermost_logo.jpg dist/$(PLUGIN_ID)/server/dist/mattermost_logo.jpg;
 endif
 ifneq ($(HAS_WEBAPP),)
