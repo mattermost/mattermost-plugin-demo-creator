@@ -42,13 +42,13 @@ func (s *Server) Start() error {
 }
 
 func (s *Server) RegisterBotUser() error {
-	var err error
+	var err *model.AppError
 
 	user := &model.User{
 		Username: "DemoBot",
 		Nickname: "DemoBot",
-		Email:    "daniel+demobot@schalla.me",
-		Password: "12308ßi12ß380sadjhnipoashdjas09dhj",
+		Email:    "demobot@demo.mattermost.com",
+		Password: model.NewId(),
 	}
 
 	s.botUser, err = s.api.GetUserByUsername("DemoBot")
@@ -61,25 +61,40 @@ func (s *Server) RegisterBotUser() error {
 		}
 	}
 
-	data, err := ioutil.ReadFile("plugins/com.dschalla.matterdemo-plugin/server/dist/mattermost_logo.jpg")
+	data, err2 := ioutil.ReadFile("plugins/com.dschalla.matterdemo-plugin/pictures/demobot.jpg")
 
-	if err != nil {
+	if err2 != nil {
 		return err
 	}
 
 	s.api.SetProfileImage(s.botUser.Id, data)
-	s.api.UpdateUser(s.botUser)
+	_, err = s.api.UpdateUser(s.botUser)
+	if err != nil {
+		return err
+	}
 
 	teams, err := s.api.GetTeams()
 
 	for _, team := range teams {
-		s.api.CreateTeamMember(team.Id, user.Id)
+		member, err := s.api.GetTeamMember(team.Id, s.botUser.Id)
+
+		if err != nil {
+			s.api.LogError(fmt.Sprintf("Error getting team membership: %s", err))
+		}
+
+		if member == nil {
+			_, err := s.api.CreateTeamMember(team.Id, s.botUser.Id)
+
+			if err != nil {
+				s.api.LogError(fmt.Sprintf("Error creating team membership: %s", err))
+			}
+		}
 	}
 
 	return nil
 }
 
-func (s *Server) SendWelcomePost(channelId string) {
+func (s *Server) SendWelcomePost(channelId string) *model.Post{
 
 	post := &model.Post{}
 	post.ChannelId = channelId
@@ -101,7 +116,7 @@ func (s *Server) SendWelcomePost(channelId string) {
 			Title:      "DemoBot Introduction",
 			AuthorName: "DemoBot",
 			AuthorIcon: "http://www.mattermost.org/wp-content/uploads/2016/04/icon_WS.png",
-			Text:       "Welcome to Palo Alto Bank!  Palo Alto Bank is a simulation of Mattermost in action.  We are going to give you a tour of the product and show you why Mattermost is the premier choice to making your team more productive through high trust collaboration.\n\nThis demo consists of a variety of 2-3 minute workflows to highlight Mattermost features and use cases.\n\nViewing all workflows takes about 15 minutes, and you will have access to this site until 6:00 AM UTC so that you can try it out yourself. If you would like to preview Mattermost longer, please reach request a trial at Mattermost.com/trial or via the link at the top of the demo instance.\n\nChoose a script below to start the demo for that particular workflow.  You will see the channel get created in the left-hand channel menu under private channels. Once in the channel, please read the posts and interact with buttons as they become available. You are able to run each workflow multiple times.",
+			Text:       "Welcome to Palo Alto Bank!  Palo Alto Bank is a simulation of Mattermost in action.  We are going to give you a tour of the product and show you why Mattermost is the premier choice to making your team more productive through high trust collaboration.\nTo get started, choose a demo from the options below and click “Start Demo”. You will be shown a short example scenario to give you some ideas on how other teams use Mattermost. Feel free to click around and interact with what you see! If you need more time for your organization to try Mattermost, please request a [trial](https://mattermost.com/trial/). ",
 		},
 	}
 
@@ -121,7 +136,7 @@ func (s *Server) SendWelcomePost(channelId string) {
 			Text:       script.Description,
 			Actions: []*model.PostAction{
 				{
-					Name: "Start Script",
+					Name: "Start Demo",
 					Integration: &model.PostActionIntegration{
 						URL: url + "/plugins/com.dschalla.matterdemo-plugin/start_script",
 						Context: map[string]interface{}{
@@ -134,7 +149,21 @@ func (s *Server) SendWelcomePost(channelId string) {
 		i++
 	}
 	post.AddProp("attachments", attachments)
-	s.api.CreatePost(post)
+
+	config := s.api.GetConfig()
+	*config.TeamSettings.ExperimentalTownSquareIsReadOnly = false
+	s.api.SaveConfig(config)
+
+	post, err := s.api.CreatePost(post)
+
+	*config.TeamSettings.ExperimentalTownSquareIsReadOnly = true
+	s.api.SaveConfig(config)
+
+	if err != nil {
+		s.api.LogError(fmt.Sprintf("Error creating welcome post: %s", err))
+	}
+
+	return post
 }
 
 func (s *Server) StartScript(teamId, userId, scriptId string) {

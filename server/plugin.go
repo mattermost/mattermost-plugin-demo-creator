@@ -2,26 +2,19 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/DSchalla/MatterDemo-Plugin/server/demo"
 	"github.com/mattermost/mattermost-server/model"
-	ioutil "io/ioutil"
-	"net/http"
-	"strings"
-	"sync"
-
 	"github.com/mattermost/mattermost-server/plugin"
+	"io/ioutil"
+	"net/http"
+	"reflect"
+	"strings"
 )
 
 type Plugin struct {
 	plugin.MattermostPlugin
-
-	// configurationLock synchronizes access to the Configuration.
-	configurationLock sync.RWMutex
-
-	// Configuration is the active plugin Configuration. Consult getConfiguration and
-	// setConfiguration for usage.
-	configuration *Configuration
 
 	server *demo.Server
 }
@@ -30,16 +23,52 @@ func (p *Plugin) OnActivate() error{
 	p.server = demo.NewServer(p.API)
 	err := p.server.Start()
 
-	if err != nil {
+	if err != nil && (reflect.ValueOf(err).Kind() == reflect.Ptr && !reflect.ValueOf(err).IsNil()){
 		return err
 	}
 
+	// Register fallback command
+
 	introCommand := &model.Command{
 		Trigger: "demobot_intro",
-		AutoComplete: true,
-		AutoCompleteDesc: "Start Introduction to Demobot capabilities and menu of available demonstrations",
 	}
 	p.API.RegisterCommand(introCommand)
+
+	// Send welcome post to town square
+
+	teams, err2 := p.API.GetTeams()
+	if err2 != nil {
+		return errors.New(err2.Message)
+	}
+
+	for _, team := range teams {
+		data, err2 := p.API.KVGet("welcomePostTownSquare-" + team.Id)
+
+		if err2 != nil {
+			return errors.New(err2.Message)
+		}
+
+		channel, err2 := p.API.GetChannelByName(team.Id, "town-square", false)
+
+		if err2 != nil {
+			return errors.New(err2.Message)
+		}
+
+		var post *model.Post
+
+		if data == nil {
+			post = p.server.SendWelcomePost(channel.Id)
+		}
+
+		post, err2 = p.API.GetPost(string(data))
+
+		if err2 != nil || post == nil {
+			post = p.server.SendWelcomePost(channel.Id)
+		}
+
+		p.API.KVSet("welcomePostTownSquare-" + team.Id, []byte(post.Id))
+
+	}
 
 	return nil
 }
@@ -50,6 +79,7 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 	if strings.HasPrefix(args.Command, "/demobot_intro") {
 		p.server.SendWelcomePost(args.ChannelId)
 	}
+
 	return &model.CommandResponse{}, nil
 }
 

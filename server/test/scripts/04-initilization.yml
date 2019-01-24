@@ -6,8 +6,6 @@ description: >
   For large scale deployments, a hardware proxy with dedicated devices for processing SSL encryption and decryption are recommended.  In a high availability configuration the proxy balances network load across multiple Mattermost servers.
 
   **Audience:** Network Administration, InfoSec         **Length:** 2 minutes
-
-  ##### Click below to start the script
 channel:
   id: initialization
   name: Initialization

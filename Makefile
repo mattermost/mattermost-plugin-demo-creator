@@ -101,8 +101,9 @@ ifneq ($(HAS_SERVER),)
 	mkdir -p dist/$(PLUGIN_ID)/server/dist;
 	cp -r server/dist/* dist/$(PLUGIN_ID)/server/dist/;
 	mkdir dist/$(PLUGIN_ID)/scripts/;
+	mkdir dist/$(PLUGIN_ID)/pictures/;
 	cp server/test/scripts/*.yml dist/$(PLUGIN_ID)/scripts/;
-	cp server/test/mattermost_logo.jpg dist/$(PLUGIN_ID)/server/dist/mattermost_logo.jpg;
+	cp server/test/pictures/*.jpg dist/$(PLUGIN_ID)/pictures/;
 endif
 ifneq ($(HAS_WEBAPP),)
 	mkdir -p dist/$(PLUGIN_ID)/webapp/dist;

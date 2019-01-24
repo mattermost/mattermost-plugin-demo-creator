@@ -5,9 +5,7 @@ priority: 3
 description: >
    **Description:** Keeping a pulse on real-time activities of your environment is key to keeping it running smoothly and maintaining uptime.  In the monitoring channel, hooks into crucial systems post a heartbeat to make reviewing easy and convenient.  Alerts allow the team to take action before issues arise.
 
-   **Audience:** DevOps         **Length:** 1 minutes 
-
-   ##### Click below to start the script
+   **Audience:** DevOps         **Length:** 1 minutes
 channel:
   id: monitoring
   name: Monitoring

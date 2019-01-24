@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/mattermost/mattermost-server/model"
 	"github.com/mattermost/mattermost-server/plugin"
+	"io/ioutil"
 	"math/rand"
 	"strconv"
 	"time"
@@ -47,8 +48,8 @@ func (sr *ScriptRunner) Start() error {
 			newUser := &model.User{
 				Username: user.Id,
 				Nickname: user.Name,
-				Email:    user.Id + "-sample-mail@example.com",
-				Password: user.Id + "thisshouldbechanged",
+				Email:    user.Id + "-sample-mail@demo.mattermost.com",
+				Password: model.NewId(),
 			}
 
 			systemUser, err = sr.api.CreateUser(newUser)
@@ -57,6 +58,14 @@ func (sr *ScriptRunner) Start() error {
 				sr.api.LogError(fmt.Sprintf("Error creating user for Script: %s", err.Message))
 				continue
 			}
+		}
+
+		data, err2 := ioutil.ReadFile("plugins/com.dschalla.matterdemo-plugin/pictures/" + user.Id + ".jpg")
+
+		if err2 != nil {
+			sr.api.LogError(fmt.Sprintf("Error setting profile picture: %s", err2))
+		} else {
+			sr.api.SetProfileImage(systemUser.Id, data)
 		}
 
 		teamMember, _ := sr.api.GetTeamMember(sr.teamId, systemUser.Id)
@@ -75,8 +84,12 @@ func (sr *ScriptRunner) Start() error {
 	}
 
 	sr.api.AddChannelMember(sr.channelId, sr.creatorId)
+
+	/*
+	// Disabled for now
 	sr.sendScriptProlog()
 	time.Sleep(time.Second * time.Duration(10))
+	 */
 
 	sr.api.LogDebug("Starting Post Generation...")
 
@@ -143,7 +156,7 @@ func (sr *ScriptRunner) sendScriptProlog() {
 			Title:      "Script: " + sr.script.Name,
 			AuthorName: "DemoBot",
 			AuthorIcon: "http://www.mattermost.org/wp-content/uploads/2016/04/icon_WS.png",
-			Text:       "Hello @" + user.Username + " and welcome to the " + sr.script.Name + " demonstration. Starting in 10 seconds.",
+			Text:       "Hello @" + user.Username + "! ",
 		},
 	})
 	sr.api.CreatePost(post)

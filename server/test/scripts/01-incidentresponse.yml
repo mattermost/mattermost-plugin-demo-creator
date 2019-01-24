@@ -6,9 +6,6 @@ description: >
   Resolution times are shortened by removing coordination of resources.  Tracking issue response and resolution activities help the team become more efficient in the future and allow a larger audience to keep current with updates. 
 
   **Audience:** DevOps, InfoSec         **Length:** 2 minutes
-
-  ##### Click below to start the script
-
 channel:
   id: incident_response
   name: Incident Response

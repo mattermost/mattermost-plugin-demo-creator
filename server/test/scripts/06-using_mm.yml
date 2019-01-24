@@ -5,8 +5,6 @@ description: >
   **Description:** Wondering more about getting around and other features in Mattermost? This workflow provides posts to describe navigation and other features that may be of interest.  The demo bot will post instructions and resources to help you learn more.
 
   **Audience:** Any team         **Length:** 3 minutes
-
-  ##### Click below to start the script
 channel:
   id: using_mattermost
   name: Using Mattermost

@@ -5,9 +5,7 @@ description: >
   **Description:** Product development and release management can include many different resources and processes.  Managing tasks and cross-departmental collaboration requires coordination and abundant information sharing. 
   Mattermost provides a variety of methods to help facilitate clear communications in defined and ad hoc processes.
 
-  **Audience:** R&D, Project Management         **Length:** 2 minutes 
-
-  ##### Click below to start the script
+  **Audience:** R&D, Project Management         **Length:** 2 minutes
 channel:
   id: development
   name: Development
