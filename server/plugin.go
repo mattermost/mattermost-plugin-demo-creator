@@ -58,12 +58,12 @@ func (p *Plugin) OnActivate() error{
 
 		if data == nil {
 			post = p.server.SendWelcomePost(channel.Id)
-		}
+		} else {
+			post, err2 = p.API.GetPost(string(data))
 
-		post, err2 = p.API.GetPost(string(data))
-
-		if err2 != nil || post == nil {
-			post = p.server.SendWelcomePost(channel.Id)
+			if err2 != nil || post == nil {
+				post = p.server.SendWelcomePost(channel.Id)
+			}
 		}
 
 		p.API.KVSet("welcomePostTownSquare-" + team.Id, []byte(post.Id))
