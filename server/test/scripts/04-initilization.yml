@@ -1,0 +1,154 @@
+id: initialization
+name: Initialization
+priority: 4
+description: >
+  **Description:** The initialization channel features logs for the set up of this demo instance environment.  A high availability cluster enables a Mattermost system to maintain service during outages and hardware failures through the use of redundant infrastructure. Failure of any one of these components does not interrupt operation of the system.
+  For large scale deployments, a hardware proxy with dedicated devices for processing SSL encryption and decryption are recommended.  In a high availability configuration the proxy balances network load across multiple Mattermost servers.
+
+  **Audience:** Network Administration, InfoSec         **Length:** 2 minutes
+
+  ##### Click below to start the script
+channel:
+  id: initialization
+  name: Initialization
+  description: >
+    This channel features logs events of the initialization of this live demo system. [Learn more about deploying Mattermost](https://docs.mattermost.com/deployment/deployment.html)
+users:
+- id: demobot
+  name: Mattermost Demo Bot
+  bot: true
+- id: serverinitializationbot
+  name: Server Initialization Bot
+  bot: true
+messages:
+- user_id: demobot
+  text: >
+    The initialization channel features logs for the set up of this demo instance environment.  A high availability cluster enables a Mattermost system to maintain service during outages and hardware failures through the use of redundant infrastructure. Failure of any one of these components does not interrupt operation of the system.
+
+    For large scale deployments, a hardware proxy with dedicated devices for processing SSL encryption and decryption are recommended.  In a high availability configuration the proxy balances network load across multiple Mattermost servers.
+  post_delay: 12
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 1: Server is started
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 2: Server is started
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 1: Server is listening on [::]:8065
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 2: Server is listening on [::]:8065
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 1: Pinging SQL master database
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 2: Pinging SQL master database
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 1: Current version is 5.7.0
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 2: Current version is 5.7.0
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 1: Enterprise Enabled: true
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 2: Enterprise Enabled: true
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 1: Loaded config file from .../mattermost/config/config.json
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 2: Loaded config file from .../mattermost/config/config.json
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 1: License key valid unlocking enterprise features
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 2: License key valid unlocking enterprise features
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 1: Starting up plugins
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 2: Starting up plugins
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 1: Starting 4 websocket hubs
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 2: Starting 4 websocket hubs
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 1: Metrics and profiling server is listening on :8067
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 2: Metrics and profiling server is listening on :8067
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 1: Starting workers
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 2: Starting workers
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 1: Starting schedulers
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 2: Starting schedulers
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 1: SSL Test Successful
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 2: SSL Test Successful
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 1: Email Test Successful
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 2: Email Test Successful
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 1: Found users with LDAP configured
+  post_delay: 3
+- user_id: serverinitializationbot
+  text: >
+    HA Cluster - Server 2: Found users with LDAP configured
+  post_delay: 3
+- user_id: demobot
+  text: >
+    Please choose another live demo workflow from the ‘Town Square’ channel.  [Click here](www.mattermost.com/trial)if you are interested in a trial.
+
+  ##########################################

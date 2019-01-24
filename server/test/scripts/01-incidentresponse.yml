@@ -1,0 +1,144 @@
+id: incident_response
+name: Incident Response
+priority: 1
+description: >
+  **Description:** Time is crucial in a incident response scenario.  Automatic channel creation and notifications ensure response is immediate.  Within minutes the team can be alerted of the issue, review background logs and resources and update the issue tracking system with progress.  
+  Resolution times are shortened by removing coordination of resources.  Tracking issue response and resolution activities help the team become more efficient in the future and allow a larger audience to keep current with updates. 
+
+  **Audience:** DevOps, InfoSec         **Length:** 2 minutes
+
+  ##### Click below to start the script
+
+channel:
+  id: incident_response
+  name: Incident Response
+  description: >
+    Issue: #1231 - Serverity: S1 - Opened at 2019/01/04 16:32
+users:
+- id: demobot
+  name: Mattermost Demo Bot
+  bot: true
+- id: dhuber
+  name: Draven Huber
+  position: Network Admin
+- id: mnorris
+  name: Moriah Norris
+  position: Network Engineer
+- id: rholloway
+  name: Ronan Holloway
+  position: Security Engineer
+- id: choffman
+  name: Cordell Hoffman
+  position: Network Manager
+- id: incidentbot
+  name: PaloAltoBank Incident Bot
+  bot: true
+- id: threatbot
+  name: Email Threat Bot
+  bot: true
+- id: zendesk
+  name: PaloAltoBank ZenDesk Bot
+  bot: true
+messages:
+- user_id: demobot
+  text: >
+    Time is crucial in a incident response scenario.  Automatic channel creation and notifications ensure response is immediate.  Within minutes the team can be alerted of the issue, review background logs and resources and update the issue tracking system with progress.  Resolution times are shortened by removing the effort required to coordinate resources.  Tracking issue response and resolution activities help the team become more efficient in the future and allow a larger audience to keep current with updates.
+  post_delay: 12
+- user_id: incidentbot
+  text: >
+    ### ### Email Received - Suspected Phishing Attempt
+
+    Header Parsed: 
+
+    ```MIME-Version: 1.0
+    Date: Fri, 18 Jan 2019 14:32:06 -0400
+    Message-ID: <CAEroB_23tG5AFsYCvpG9atbGCmqhPeEAa2FNpm9zgyx5pZB3NQ@mail.gmail.com>
+    Subject: Check this out!
+    From: Selena Adams<ceoxxo@.com>
+    To: <ariella.hess@paloaltobank.org>
+    Content-Type: multipart/alternative; boundary="000000000000753ba0057fbfbae5"
+
+     --000000000000753ba0057fbfbae5
+    Content-Type: text/plain; charset="UTF-8"
+
+    This is a really neat thing.  Please make sure you read this link <.http://ceoxxo.com/> and let’s chat about it when you have a moment.
+
+    Sincerely,  
+    Selena Adams```
+
+  post_delay: 3
+- user_id: zendesk
+  text: >
+    Case Created in Zendesk.  [Zendesk Issue #12345](http://zendesk.com).  SLA Assigned: S3: 12 hours to response.
+  post_delay: 1
+- user_id: threatbot
+  attachments:
+  - title: >
+      Threat Confirmed
+    titleLink: http://zendesk.com/12345
+    color: >
+      #ff0000
+    author_name: Email Threat Bot
+    fields:
+    - title: No#
+      value: 12345
+      short: True
+    - title: Severity
+      value: S3
+      short: True
+    actions:
+    - name: Add Domain to Blacklist
+      response_id: response_1
+    - name: Close Incident as False Positive
+  post_delay: 5
+- user_id: dhuber
+  text: >
+    Received the notification-I’m on the road, @mnorris can you take a look?
+  post_delay: 9
+  replies:
+  - user_id: mnorris
+    text: >
+      This is an odd one. Seems Selena has been a target a few times this month. I’ve checked the proxy logs and confirmed that she didn’t open the URL, so we are good to just block the domain in the proxy and mail filter.
+    post_delay: 6
+  - user_id: rholloway
+    text: >
+      This could be part of an ongoing scheme. I’ve found references to that domain on various analysis websites for phishing schemes.
+    post_delay: 8
+- user_id: rholloway
+  text: >
+    Looks similar to a phishing email received recently by Steve from Finance.
+  post_delay: 6
+- user_id: dhuber
+  text: >
+    @mnorris send a reminder to everyone on procedure for phishing attacks
+  post_delay: 4
+  reactions:
+  - user_id: choffman
+    id: thumbsup
+    delay: 3
+  replies:
+  - user_id: mnorris
+    text: >
+      Yes good idea - I will distribute and follow up with managers to make sure they review the procedures with their teams.  
+    post_delay: 7
+  - user_id: mnorris
+    text: >
+      Good work, guys! Thanks for the quick response and resolution.
+    post_delay: 6
+- user_id: zendesk
+  text: >
+    [Zendesk Issue #12345](http://zendesk.com) marked closed.  Time to Close = 3 minutes.  S3 SLA Resolution time met.
+
+    This channel will be automatically archived after 30 days.  A transcript of this issue has been attached to the [Zendesk Issue #12345](http://zendesk.com).
+  post_delay: 5
+- user_id: demobot
+  text: >
+    Please choose another live demo workflow from the ‘Town Square’ channel.  [Click here](www.mattermost.com/trial)if you are interested in a trial.
+responses:
+- id: response_1
+  message:
+    user_id: threatbot
+    text: >
+      ### Added Blacklist Entry:  ```ceoxxo@.com```
+
+  ##############################

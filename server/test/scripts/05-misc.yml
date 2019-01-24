@@ -1,0 +1,100 @@
+id: miscellaneous
+name: Misc Movies
+priority: 5
+description: >
+  **Description:** Having a place for “around the water cooler” communication facilitates social interactions. When a team build comradery through shared interests, culture is built and people’s work environment is more enjoyable.
+
+  **Audience:** Any team.         **Length:** 2 minutes
+
+  ##### Click below to start the script
+channel:
+  id: miscellaneous
+  name: Misc Movies
+  description: >
+    Water-cooler conversations around movies
+users:
+- id: demobot
+  name: Mattermost Demo Bot
+  bot: true
+- id: ledwards
+  name: Lionel Edwards
+  position: Loan Representative
+- id: zburch
+  name: Zachariah Burch
+  position: Lending Manager
+- id: mdavis
+  name: Matt Davis
+  position: Customer Service Representative
+- id: anelson
+  name: Amy Nelson
+  position: Consumer Credit Analyst
+messages:
+- user_id: demobot
+  text: >
+    Having a place for “around the water cooler” communication facilitates social interactions. When a team build comradery through shared interests, culture is built and people’s work environment is more enjoyable.
+  post_delay: 12
+- user_id: ledwards
+  text: >
+    I'm trying to catch up on the Marvel series, but the last one I saw was Iron Man and I have no idea which ones to see next. Recommendations?
+  post_delay: 8
+  replies:
+  - user_id: mdavis
+    text: >
+      If you enjoy watching extraterrestrial stories, I'd recommend watching of Guardians of the Galaxy. It's story circle around Peter Quill who forms an uneasy alliance with a group of extraterrestrial misfits who are fleeing after stealing a powerful artifact.
+    post_delay: 3
+  - user_id: mdavis
+    text: >
+      You may start watching Vol. 1 of 2014.
+    post_delay: 5
+  - user_id: ledwards
+    text: >
+      Thanks for the recommendation! That's the movie with the "tree character", right? Vin Diesel plays his voice?
+    post_delay: 7
+- user_id: zburch
+  text: >
+    https://media.giphy.com/media/3o7budMRwZvNGJ3pyE/giphy.gif
+
+    Groot!  Yes the first one has big groot, but the 2nd Guardians has Baby Groot & Teenager Groot at the end.  Best character in both movies!
+  post_delay: 6
+- user_id: ledwards
+  text: >
+    I feel like I'm missing some backstory here. Iron Man -> outer space? How did that happen? Or is this movie an anomaly in the Marvel universe?
+  post_delay: 3
+- user_id: zburch
+  text: >
+    All part of the marvel *universe*
+  post_delay: 6
+  replies:
+  - user_id: mdavis
+    text: >
+      Hmmm, it made me think of it as well. My quick search tells me that back in the days, it's initially about super-guerillas fighting against Russians and Chinese who had taken over the USA, and then later on the author decided to change it into interplanetary situation.
+      It's unusual setting for Marvels, though.
+    post_delay: 5
+  - user_id: anelson
+    text: >
+      Ah, I love that movie!
+    post_delay: 10
+- user_id: anelson
+  text: >
+    Here's one of my favorite Marvel moments: https://media.giphy.com/media/3o7aDejLjaii0E4v2E/giphy.gif
+  post_delay: 11
+- user_id: anelson
+  text: >
+    ### Who do you think was the more clever villain?
+    :space_invader: Thanos
+    :japanese_ogre:  Red Skull
+  post_delay: 6
+  reactions:
+  - user_id: zburch
+    id: japanese_ogre
+  - user_id: mdavis
+    id: space_invader
+    delay: 3
+  - user_id: anelson
+    id: japanese_ogre
+    delay: 3
+- user_id: demobot
+  text: >
+    Please choose another live demo workflow from the ‘Town Square’ channel.  [Click here](www.mattermost.com/trial)if you are interested in a trial.  - user_id: demobot
+
+  ###############################################################
