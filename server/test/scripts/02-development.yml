@@ -2,223 +2,251 @@ id: development
 name: Development
 priority: 2
 description: >
-  **Description:** Product development and release management can include many different resources and processes.  Managing tasks and cross-departmental collaboration requires coordination and abundant information sharing. 
-  Mattermost provides a variety of methods to help facilitate clear communications in defined and ad hoc processes.
+  **Description:** Check in on the release team managing complex release processes with checklists and shared resources.
 
-  **Audience:** R&D, Project Management         **Length:** 2 minutes
+  **Audience:** R&D, Project Management         **Length:** 2 minutes 
 channel:
   id: development
   name: Development
   description: >
     Ready, Set, Release! Tracking of release processes for the product development team of Palo Alto.
 users:
-- id: demobot
-  name: Mattermost Demo Bot
-  bot: true
-- id: cholder
-  name: Caden Holder
-  position: DevOps Engineer
-- id: sbowen
-  name: Savion Bowen
-  position: Developer
-- id: cberry
-  name: Cruz Berry
-  position: Developer
-- id: gjackson
-  name: Gregory Jackson
-  position: Developer Lead
-- id: aharrington
-  name: Alana Harrington
-  position: Product Manager
-- id: eparker
-  name: Enzo Parker
-  position: Release Manager
-- id: klin
-  name: Kiersten Lin
-  position: Marketing Manager
-- id: llloyd
-  name: Laurell Lloyd
-  position: Quality Assurance
-- id: releasebot
-  name: Release Bot
-  bot: true
+  - id: demobot
+    name: Mattermost Demo Bot
+    bot: true
+  - id: cholder
+    name: Caden Holder
+    position: DevOps Engineer
+  - id: sbowen
+    name: Savion Bowen
+    position: Developer
+  - id: cberry
+    name: Cruz Berry
+    position: Developer
+  - id: gjackson
+    name: Gregory Jackson
+    position: Developer Lead
+  - id: aharrington
+    name: Alana Harrington
+    position: Product Manager
+  - id: eparker
+    name: Enzo Parker
+    position: Release Manager
+  - id: klin
+    name: Kiersten Lin
+    position: Marketing Manager
+  - id: llloyd
+    name: Laurell Lloyd
+    position: Quality Assurance
+  - id: releasebot
+    name: Release Bot
+    bot: true
 messages:
-- user_id: demobot
-  text: >
-    Product development and release management can include many different resources and processes.  Managing tasks and cross-departmental collaboration requires coordination and abundant information sharing. Mattermost provides a variety of methods to help facilitate clear communications in defined and ad hoc processes.
-  post_delay: 12
-- user_id: eparker
-  text: >
-    Hey @all reminder that today is Release Day!  Please review the checklist below for your outstanding tasks:
+  - user_id: demobot
+    attachments:
+      - title: >
+          Development Demo Introduction
+        titleLink:
+        color: >
+          #213f6b
+        author_name: DemoBot
+        fields:
+          - title:
+            value: Welcome, @channel! Managing tasks and cross-departmental collaboration for complex processes requires coordination and abundant information sharing. Mattermost provides a variety of methods to help facilitate clear communications in defined and ad hoc processes.
+            short: False
+    post_delay: 10
+  - user_id: eparker
+    text: >
+      Hey @all reminder that today is Release Day!  Please review the checklist below for your outstanding tasks:
 
-    ### (T-minus 0 working days) Release Day
-      1. **Release Manager:**
-       - ~~Post this checklist in Release Checklist channel~~
-       - ~~Schedule a release retrospective meeting, to be held within 5 days from the release~~
-       - Prepare and post release metrics
-       - ~Close the release in Jira~
-      2. **QA:**
-       - Verify all PRs and tickets for the release have been tested / closed
-       - Verify smoke tests on platform and apps all passed
-       - Post QA approval
-      3. **Product Management:**
-       - Review and update [company roadmap](https://mattermost.com/roadmap/)
-       - Create a new branch on docs for the next release - vX.X-documentation
-      4. **Dev Ops:**
-       - Tag new release and run an official build
-       - Post signatures of the final build
-       - Put servers back onto master, and post once done
-      5. **Dev:**
-       - Confirm app is updated to final build
-       - Update existing tickets or create new ones for the next release
-      6. **Marketing:**
-       - Confirm marketing has been posted (animated GIFs, screenshots, mail announcement, tweets, blog posts)
-       - Update Twitter profile with the next release date
-  post_delay: 8
-  replies:
-  - user_id: aharrington
-    text: >
-      New documentation branch and PR for the changelog has been created. Roadmap has also been reviewed.
-    post_delay: 11
-  - user_id: llloyd
-    text: >
-      I have verified all tickets have been tested and closed. Smoke tests are being completed right now.
+      ### (T-minus 0 working days) Release Day
+        1. **Release Manager:**
+         - ~~Post this checklist in Release Checklist channel~~
+         - ~~Schedule a release retrospective meeting, to be held within 5 days from the release~~
+         - Prepare and post release metrics
+         - ~~Close the release in Jira~~
+        2. **QA:**
+         - Verify all PRs and tickets for the release have been tested / closed
+         - Verify smoke tests on platform and apps all passed
+         - Post QA approval
+        3. **Product Management:**
+         - Review and update [company roadmap](https://mattermost.com/roadmap/)
+         - Create a new branch on docs for the next release - vX.X-documentation
+        4. **Dev Ops:**
+         - Tag new release and run an official build
+         - Post signatures of the final build
+         - Put servers back onto master, and post once done
+        5. **Dev:**
+         - Confirm app is updated to final build
+         - Update existing tickets or create new ones for the next release
+        6. **Marketing:**
+         - Confirm marketing has been posted (animated GIFs, screenshots, mail announcement, tweets, blog posts)
+         - Update Twitter profile with the next release date
     post_delay: 8
-  - user_id: llloyd
-    text: >
-      Smoke tests completed.  QA gives final approval :white_check_mark:
-    post_delay: 7
-  - user_id: cholder
-    text: >
-      Cutting final :tada:
-    post_delay: 6
-  - user_id: klin
-    text: >
-      Marketing has been confirmed - all posts are publically available.  Twitter has been updated. 
-    post_delay: 4
-  - user_id: cholder
-    text: >
-      My task is complete. CI servers now are on master.
-    post_delay: 7
-  - user_id: gjackson
-    text: >
-      - [x] Confirm app is updated to final build
-      - [x] Update existing tickets or create new ones for the next release
-    post_delay: 6
-  - user_id: aharrington
-    text: >
-      There have been two separate reports by customers of broken file uploads.  I haven’t been able to reproduce, but I think we need to check into this ASAP to make sure there is not something that was introduced in this last release.
-
-      @QA, can you please help try to reproduce the issue? Here are some JS Errors one customer reported and here is a full stack trace from the other report
-
-      Errors:
-
-      JS Errors: ```2018-12-16T17:13:40.107-0600    error    web/context.go:60    msg: Uncaught TypeError: Cannot read property ‘toFixed’ of undefined row: 36 col: 79222 stack: TypeError: Cannot read property ‘toFixed’ of undefined url: https://host.example.com/static/main.495bc49800ee9aa7d2f3.js    {“path”: “/api/v4/logs”, “request_id”: “1snjgfwwx3yq9xhppx6eaqrhac”, “ip_addr”: “192.168.10.115”, “user_id”: “6w9cdk4adprj3fjprgtzesbt7h”, “method”: “POST”, “err_where”: “client”, “http_code”: 0, “err_details”: “”}```
-
-      Stack Trace:
-
-      ```react-dom.production.min.js:171 TypeError: Cannot read property 'toFixed' of undefined
-      at t.value (file_progress_preview.jsx:31)
-      at Ka (react-dom.production.min.js:156)
-      at Qa (react-dom.production.min.js:155)
-      at $a (react-dom.production.min.js:162)
-      at Oi (react-dom.production.min.js:192)
-      at Ii (react-dom.production.min.js:193)
-      at co (react-dom.production.min.js:205)
-      at uo (react-dom.production.min.js:204)
-      at Ui (react-dom.production.min.js:200)
-      at Object.enqueueSetState (react-dom.production.min.js:130)
-      ai @ react-dom.production.min.js:171
-      n.callback @ react-dom.production.min.js:179
-      ra @ react-dom.production.min.js:125
-      na @ react-dom.production.min.js:125
-      lo @ react-dom.production.min.js:214
-      co @ react-dom.production.min.js:205
-      uo @ react-dom.production.min.js:204
-      at Object.enqueueSetState (react-dom.production.min.js:130)```
-    post_delay: 6
     replies:
-    - user_id: llloyd
-      text: >
-        Of course.
-      post_delay: 10
-    - user_id: llloyd
-      text: >
-        Ok, I was able to reproduce and here is what I found:
+      - user_id: aharrington
+        text: >
+          New documentation branch and PR for the changelog has been created. Roadmap has also been reviewed.
+        post_delay: 11
+      - user_id: llloyd
+        text: >
+          I have verified all tickets have been tested and closed. Smoke tests are being completed right now.
+        post_delay: 8
+      - user_id: llloyd
+        text: >
+          Smoke tests completed.  QA gives final approval :white_check_mark:
+        post_delay: 7
+      - user_id: cholder
+        text: >
+          Cutting final :tada:
+        post_delay: 6
+      - user_id: klin
+        text: >
+          Marketing has been confirmed - all posts are publically available.  Twitter has been updated.
+        post_delay: 4
+      - user_id: cholder
+        text: >
+          My task is complete. CI servers now are on master.
+        post_delay: 7
+      - user_id: gjackson
+        text: >
+          - [x] Confirm app is updated to final build
 
-        Issue is a regression- it was not an issue in the previous release. Here are the files I tested with:
+          - [x] Update existing tickets or create new ones for the next release
+        post_delay: 6
+      - user_id: aharrington
+        text: >
+          There have been two separate reports by customers of broken file uploads.  I haven’t been able to reproduce, but I think we need to check into this ASAP to make sure there is not something that was introduced in this last release.
+      - user_id: aharrington
+        text: >
+          @QA, can you please help try to reproduce the issue? Here are some JS Errors one customer reported and here is a full stack trace from the other report
+      - user_id: aharrington
+        text: >
+          Errors:
 
-         |       Attachment File Type  | Pass or Fail |
-         |       :----------------------------- |:---------------:|
-         |       .pdf | ![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg =25 "Failed")|
-         |       .txt |![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg =25 "Failed")|
-         |       .docx|![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg =25 "Failed")|
-         |       .pptx |![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg  =25 "Failed") |
+          JS Errors: ```2018-12-16T17:13:40.107-0600    error    web/context.go:60    msg: Uncaught TypeError: Cannot read property ‘toFixed’ of undefined row: 36 col: 79222 stack: TypeError: Cannot read property ‘toFixed’ of undefined url: https://host.example.com/static/main.495bc49800ee9aa7d2f3.js    {“path”: “/api/v4/logs”, “request_id”: “1snjgfwwx3yq9xhppx6eaqrhac”, “ip_addr”: “192.168.10.115”, “user_id”: “6w9cdk4adprj3fjprgtzesbt7h”, “method”: “POST”, “err_where”: “client”, “http_code”: 0, “err_details”: “”}```
 
-        Which dev worked last on this area?  Can they pinpoint where this issue was introduced?
-    - user_id: aharrington
-      text: >
-        Thank you so much for your quick response @llloyd.  @sbowen, I think you were working on this feature?  I have created a ticket to track the work.
-      post_delay: 6
-- user_id: sbowen
-  text: >
-    Yes, bummer.  That is something I worked on.  I will get a PR submitted for a fix in the next hour or so.
-  post_delay: 6
-- user_id: aharrington
-  text: >
-    Great.  I think we will need to put out a dot release.  This is a core area of the app that could be really frustrustating for a lot of users if we don’t address right away.
-    cc://@eparker
-  post_delay: 6
-  replies:
+          Stack Trace:
+
+          ```react-dom.production.min.js:171 TypeError: Cannot read property 'toFixed' of undefined
+          at t.value (file_progress_preview.jsx:31)
+          at Ka (react-dom.production.min.js:156)
+          at Qa (react-dom.production.min.js:155)
+          at $a (react-dom.production.min.js:162)
+          at Oi (react-dom.production.min.js:192)
+          at Ii (react-dom.production.min.js:193)
+          at co (react-dom.production.min.js:205)
+          at uo (react-dom.production.min.js:204)
+          at Ui (react-dom.production.min.js:200)
+          at Object.enqueueSetState (react-dom.production.min.js:130)
+          ai @ react-dom.production.min.js:171
+          n.callback @ react-dom.production.min.js:179
+          ra @ react-dom.production.min.js:125
+          na @ react-dom.production.min.js:125
+          lo @ react-dom.production.min.js:214
+          co @ react-dom.production.min.js:205
+          uo @ react-dom.production.min.js:204
+          at Object.enqueueSetState (react-dom.production.min.js:130)```
+        post_delay: 6
+        replies:
+          - user_id: llloyd
+            text: >
+              Of course.
+            post_delay: 10
+          - user_id: llloyd
+            text: >
+              Ok, I was able to reproduce and here is what I found:
+
+              Issue is a regression- it was not an issue in the previous release. Here are the files I tested with:
+
+               |       Attachment File Type  | Pass or Fail |
+               |       :----------------------------- |:---------------:|
+               |       .pdf | ![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg =25 "Failed")|
+               |       .txt |![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg =25 "Failed")|
+               |       .docx|![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg =25 "Failed")|
+               |       .pptx |![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg  =25 "Failed") |
+
+              Which dev worked last on this area?  Can they pinpoint where this issue was introduced?
+          - user_id: aharrington
+            text: >
+              Thank you so much for your quick response @llloyd.  @sbowen, I think you were working on this feature?  I have created a ticket to track the work.
+            post_delay: 6
   - user_id: sbowen
     text: >
-        On it.
-    post_delay: 12
-- user_id: sbowen
-  text: >
-    Fix has been submitted.  Can I get a review quick from my other devs?
-  post_delay: 6
-  replies:
-  - user_id: gjackson
+      Yes, bummer.  That is something I worked on.  I will get a PR submitted for a fix in the next hour or so.
+    post_delay: 6
+  - user_id: aharrington
     text: >
-      Looks good.  Wondering about your logic here, but I can queue for our developer’s conversation later in the week.
+      Great.  I think we will need to put out a dot release.  This is a core area of the app that could be really frustrustating for a lot of users if we don’t address right away.
 
-      ``` go
-      export function trimFilename(filename) {
-      let trimmedFilename = filename;
-      if (filename.length > Constants.MAX_FILENAME_LENGTH) {
-      trimmedFilename = filename.substring(0, Math.min(Constants.MAX_FILENAME_LENGTH, filename.length)) + '...';
-      }
-
-      return trimmedFilename;
-      }
-      ```
-    post_delay: 8
-  - user_id: cberry
+      cc:// @eparker
+    post_delay: 6
+    replies:
+      - user_id: sbowen
+        text: >
+          On it.
+        post_delay: 12
+  - user_id: sbowen
     text: >
-      Looks good to me as well.
-    post_delay: 5
-- user_id: eparker
-  text: >
-    ### Dot Release
-    @channel Here is the checklist for this dot release.  Let me know when you have your items addressed:
+      Fix has been submitted.  Can I get a review quick from my other devs?
+    post_delay: 6
+    replies:
+      - user_id: gjackson
+        text: >
+          Looks good.  Wondering about your logic here, but I can queue for our developer’s conversation later in the week.
+      - user_id: gjackson
+        text: >
+          ``` go
 
-    1. Release Manager:
-     - Once the list of bugs to be fixed is finalized, post this checklist in Release Checklist channel
-     - Notify customer success about upcoming dot release
-    2. Dev:
-     - PRs for hotfixes are made to release branch
-     - Review PRs made from release branch and merge changes into the release branch as required and merge the release branch back into master once per day
-    3. DevOps
-     - Verify with Release Manager before cutting any new dot release RCs (approved fixes should be merged)
-    4. QA:
-     - Test the new release cut to verify fixes merged to the release branch work
-     - Post in Release Discussion channel after testing
-    5. Marketing:
-     - Prepare blog post for mattermost.com and Twitter announcement, and send to PM to review.
-  post_delay: 6
-- user_id: demobot
-  text: >
-    Please choose another live demo workflow from the ‘Town Square’ channel.  [Click here](www.mattermost.com/trial)if you are interested in a trial.
+          export function trimFilename(filename) {
 
-  ##############################
+          let trimmedFilename = filename;
+
+          if (filename.length > Constants.MAX_FILENAME_LENGTH) {
+
+          trimmedFilename = filename.substring(0, Math.min(Constants.MAX_FILENAME_LENGTH, filename.length)) + '...';
+
+          }
+
+          return trimmedFilename;
+
+          } ```
+        post_delay: 8
+      - user_id: cberry
+        text: >
+          Looks good to me as well.
+        post_delay: 5
+  - user_id: eparker
+    text: >
+      ### Dot Release
+
+      @channel Here is the checklist for this dot release.  Let me know when you have your items addressed:
+
+      1. Release Manager:
+       - Once the list of bugs to be fixed is finalized, post this checklist in Release Checklist channel
+       - Notify customer success about upcoming dot release
+      2. Dev:
+       - PRs for hotfixes are made to release branch
+       - Review PRs made from release branch and merge changes into the release branch as required and merge the release branch back into master once per day
+      3. DevOps
+       - Verify with Release Manager before cutting any new dot release RCs (approved fixes should be merged)
+      4. QA:
+       - Test the new release cut to verify fixes merged to the release branch work
+       - Post in Release Discussion channel after testing
+      5. Marketing:
+       - Prepare blog post for mattermost.com and Twitter announcement, and send to PM to review.
+    post_delay: 6
+  - user_id: demobot
+    attachments:
+      - title: >
+          Development Demo Is Complete
+        titleLink:
+        color: >
+          #213f6b
+        author_name: DemoBot
+        fields:
+          - title:
+            value: Thanks for watching this demo! To watch another demo, return to ~town-square. To learn more about setting up your own Mattermost environment or to request your own trial site, click [here](https://mattermost.com/trial/).
+            short: False
+
+  ########################################

@@ -97,15 +97,49 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 
 	if strings.HasPrefix(path, "/start_script") {
 		bodyBytes, _ := ioutil.ReadAll(r.Body)
-		json.Unmarshal(bodyBytes, &requestData)
+		err := json.Unmarshal(bodyBytes, &requestData)
+		if err != nil {
+			p.API.LogError(fmt.Sprintf("Error decoding JSON: %s", err))
+			w.WriteHeader(http.StatusInternalServerError)
+			_, err = w.Write([]byte{})
+			if err != nil {
+				p.API.LogError(fmt.Sprintf("Error sending response: %s", err))
+			}
+			return
+		}
 		p.server.StartScript(requestData.TeamId, requestData.UserId, requestData.Context["script_id"])
 	} else if strings.HasPrefix(path, "/trigger_response") {
 		bodyBytes, _ := ioutil.ReadAll(r.Body)
-		json.Unmarshal(bodyBytes, &requestData)
-		p.server.TriggerResponse(requestData.ChannelId, requestData.UserId, requestData.Context["script_id"], requestData.Context["response_id"])
+		err := json.Unmarshal(bodyBytes, &requestData)
+
+		if err != nil {
+			p.API.LogError(fmt.Sprintf("Error decoding JSON: %s", err))
+			w.WriteHeader(http.StatusInternalServerError)
+			_, err = w.Write([]byte{})
+			if err != nil {
+				p.API.LogError(fmt.Sprintf("Error sending response: %s", err))
+			}
+			return
+		}
+
+		err = p.server.TriggerResponse(requestData.ChannelId, requestData.UserId, requestData.Context["script_id"], requestData.Context["response_id"])
+		if err != nil {
+
+			p.API.LogError(fmt.Sprintf("Error decoding JSON: %s", err))
+			w.WriteHeader(http.StatusInternalServerError)
+			_, err = w.Write([]byte{})
+
+			if err != nil {
+				p.API.LogError(fmt.Sprintf("Error sending response: %s", err))
+			}
+			return
+		}
 	}
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte{})
+	_, err := w.Write([]byte{})
+	if err != nil {
+		p.API.LogError(fmt.Sprintf("Error sending response: %s", err))
+	}
 }
 
 // See https://developers.mattermost.com/extend/plugins/server/reference/

@@ -1,163 +1,211 @@
-
 id: monitoring
 name: Monitoring
 priority: 3
 description: >
-   **Description:** Keeping a pulse on real-time activities of your environment is key to keeping it running smoothly and maintaining uptime.  In the monitoring channel, hooks into crucial systems post a heartbeat to make reviewing easy and convenient.  Alerts allow the team to take action before issues arise.
+  **Description:** Keep up to the minute with tracking of real-time system events and manage issues before they arise.
 
-   **Audience:** DevOps         **Length:** 1 minutes
+  **Audience:** DevOps         **Length:** 1 minute
 channel:
   id: monitoring
   name: Monitoring
   description: >
-     AWS Tracking
+    AWS Tracking
 users:
-- id: demobot
-  name: Mattermost Demo Bot
-  bot: true
-- id: emaxwell
-  name: Eduardo Maxwell
-  position: Network Admin
-- id: sray
-  name: Santiago Ray
-  position: Network Admin
-- id: jbanks
-  name: Jacob Banks
-  position: Network Admin
-- id: statusbot
-  name: AWS Status Bot
-  bot: true
-- id: authenticationbot
-  name: Authentication Bot
-  bot: true
-- id: billingbot
-  name: AWS Billing Bot
-  bot: true
+  - id: demobot
+    name: Mattermost Demo Bot
+    bot: true
+  - id: emaxwell
+    name: Eduardo Maxwell
+    position: Network Admin
+  - id: sray
+    name: Santiago Ray
+    position: Network Admin
+  - id: jbanks
+    name: Jacob Banks
+    position: Network Admin
+  - id: statusbot
+    name: AWS Status Bot
+    bot: true
+  - id: authenticationbot
+    name: Authentication Bot
+    bot: true
+  - id: billingbot
+    name: AWS Billing Bot
+    bot: true
 messages:
-- user_id: demobot
-  text: >
-     Keeping a pulse on real-time activities of your environment is key to keeping it running smoothly and maintaining uptime.  In the monitoring channel, hooks into crucial systems post a heartbeat to make reviewing easy and convenient.  Alerts allow the team to take action before issues arise.
-  post_delay: 12
-- user_id: statusbot
-  text: >
-    ## System Health Status HA Server 1:
-    - System Status:  OK
-    - Instance Status:  Running
-    - CPU Utilization:  Average: 1.06%, Minimum: 0.00%, Maximum: 15.22%
-    - Memory Utilization:  Average: 6.84%, Minimum: 6.82%, Maximum: 6.89%
-    - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A
-    - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%
-
-    [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
-
-    #aws-status-check #ha-server-1
-  post_delay: 4
-- user_id: statusbot
-  text: >
-    ## System Health Status HA Server 2:
-    - System Status:  OK
-    - Instance Status:  Running
-    - CPU Utilization:  Average: 1.08%, Minimum: 0.00%, Maximum: 14.22%
-    - Memory Utilization:  Average: 5.42%, Minimum: 5.40%, Maximum: 5.47%
-    - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A
-    - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%
-
-    [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
-
-    #aws-status-check #ha-server-2
-  post_delay: 5
-- user_id: authenticationbot
-  text: >
-     # Authentication Error Reported on: Prometheus.io
-
-     #authentication-error
-  post_delay: 5
-  replies:
-  - user_id: emaxwell
+  - user_id: demobot
+    attachments:
+      - title: >
+          Monitoring Demo Introduction
+        titleLink:
+        color: >
+          #213f6b
+        author_name: DemoBot
+        fields:
+          - title:
+            value: Welcome, @channel! Keeping a pulse on real-time activities of your environment is key to keeping it running smoothly and maintaining uptime.  Hooks into crucial systems post the heartbeat of your systems and alerts allow the team to take action before issues arise.
+            short: False
+    post_delay: 10
+  - user_id: statusbot
     text: >
-      This was me- used an old password to review our Prometheus Monitoring Dashboard.  This system’s being upgraded to SSO so shouldn’t be a recurring issue.
-  reactions:
-  - user_id: sray
-    id: thumbsup
-  - user_id: jbanks
-    id: thumbsup
-    delay: 3
-- user_id: statusbot
-  text: >
-    ## System Health Status HA Server 1:
-    - System Status:  OK
-    - Instance Status:  Running
-    - CPU Utilization:  Average: 1.06%, Minimum: 0.00%, Maximum: 15.22%
-    - Memory Utilization:  Average: 6.84%, Minimum: 6.82%, Maximum: 6.89%
-    - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A
-    - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%
+      ## System Health Status HA Server 1:
 
-    [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
+      - System Status:  OK
 
-    #aws-status-check #ha-server-1
-  post_delay: 5
-- user_id: statusbot
-  text: >
-    ## System Health Status HA Server 2:
-    - System Status:  OK
-    - Instance Status:  Running
-    - CPU Utilization:  Average: 1.08%, Minimum: 0.00%, Maximum: 14.22%
-    - Memory Utilization:  Average: 5.42%, Minimum: 5.40%, Maximum: 5.47%
-    - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A
-    - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%
+      - Instance Status:  Running
 
-    [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
+      - CPU Utilization:  Average: 1.06%, Minimum: 0.00%, Maximum: 15.22%
 
-    #aws-status-check #ha-server-2
-  post_delay: 3
-- user_id: billingbot
-  text: >
-    New Billing Alarm: AWS Service Charge (Total) 
-    #aws-billing-alarm
-  post_delay: 6
-  replies:
-  - user_id: emaxwell
-    text: >
-       Looks like we are getting close to the limit we set on the Data Transfer Service for AWS. Probably need to review our budget allocation @sray, @jbanks.
-    post_delay: 7
-  - user_id: sray
-    text: >
-      What’s our next step to make sure we get this back to where we need to be? 
-    post_delay: 8
-  - user_id: sbowen
-    text: >
-       A reallocation of the S3s should get us back to our utilization comfort zone. In our next meeting let’s get a plan for sketched out for identifying testing and other usage that can be reassigned to our production environments.
+      - Memory Utilization:  Average: 6.84%, Minimum: 6.82%, Maximum: 6.89%
+
+      - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A
+
+      - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%
+
+      [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
+
+      #aws-status-check #haserver-1
     post_delay: 4
-- user_id: statusbot
-  text: >
-    ## System Health Status HA Server 1:
-    - System Status:  OK
-    - Instance Status:  Running
-    - CPU Utilization:  Average: 1.06%, Minimum: 0.00%, Maximum: 15.22%
-    - Memory Utilization:  Average: 6.84%, Minimum: 6.82%, Maximum: 6.89%
-    - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A
-    - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%
+  - user_id: statusbot
+    text: >
+      ## System Health Status HA Server 2:
 
-    [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
+      - System Status:  OK
 
-    #aws-status-check #ha-server-1
-  post_delay: 4
-- user_id: statusbot
-  text: >
-    ## System Health Status HA Server 2:
-    - System Status:  OK
-    - Instance Status:  Running
-    - CPU Utilization:  Average: 1.08%, Minimum: 0.00%, Maximum: 14.22%
-    - Memory Utilization:  Average: 5.42%, Minimum: 5.40%, Maximum: 5.47%
-    - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A
-    - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%
+      - Instance Status:  Running
 
-    [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
+      - CPU Utilization:  Average: 1.08%, Minimum: 0.00%, Maximum: 14.22%
 
-    #aws-status-check #ha-server-2
-  post_delay: 2
-- user_id: demobot
-  text: >
-      Please choose another live demo workflow from the ‘Town Square’ channel.  [Click here](www.mattermost.com/trial)if you are interested in a trial. 
+      - Memory Utilization:  Average: 5.42%, Minimum: 5.40%, Maximum: 5.47%
 
-    ######################################################
+      - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A
+
+      - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%
+
+      [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
+
+      #aws-status-check #haserver-2
+    post_delay: 5
+  - user_id: authenticationbot
+    text: >
+      ## Authentication Error Reported on: Prometheus.io
+
+      #authentication-error
+    post_delay: 5
+    replies:
+      - user_id: emaxwell
+        text: >
+          This was me- used an old password to review our Prometheus Monitoring Dashboard.  This system’s being upgraded to SSO so shouldn’t be a recurring issue.
+  - user_id: statusbot
+    text: >
+      ### System Health Status HA Server 1:
+
+      - System Status:  OK
+
+      - Instance Status:  Running
+
+      - CPU Utilization:  Average: 1.06%, Minimum: 0.00%, Maximum: 15.22%
+
+      - Memory Utilization:  Average: 6.84%, Minimum: 6.82%, Maximum: 6.89%
+
+      - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A
+
+      - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%
+
+      [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
+
+      #aws-status-check #haserver-1
+    post_delay: 5
+  - user_id: statusbot
+    text: >
+      ### System Health Status HA Server 2:
+
+      - System Status:  OK
+
+      - Instance Status:  Running
+
+      - CPU Utilization:  Average: 1.08%, Minimum: 0.00%, Maximum: 14.22%
+
+      - Memory Utilization:  Average: 5.42%, Minimum: 5.40%, Maximum: 5.47%
+
+      - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A
+
+      - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%
+
+      [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
+
+      #aws-status-check #haserver-2
+    post_delay: 3
+  - user_id: billingbot
+    text: >
+      ## New Billing Alarm: AWS Service Charge (Total)
+
+      #aws-billing-alarm
+    post_delay: 6
+    replies:
+      - user_id: emaxwell
+        text: >
+          Looks like we are getting close to the limit we set on the Data Transfer Service for AWS. Probably need to review our budget allocation @sray, @jbanks.
+        post_delay: 7
+      - user_id: sray
+        text: >
+          What’s our next step to make sure we get this back to where we need to be?
+        post_delay: 8
+      - user_id: jbanks
+        text: >
+          A reallocation of the S3s should get us back to our utilization comfort zone. In our next meeting let’s get a plan for sketched out for identifying testing and other usage that can be reassigned to our production environments.
+        post_delay: 4
+  - user_id: statusbot
+    text: >
+      ### System Health Status HA Server 1:
+
+      - System Status:  OK
+
+      - Instance Status:  Running
+
+      - CPU Utilization:  Average: 1.06%, Minimum: 0.00%, Maximum: 15.22%
+
+      - Memory Utilization:  Average: 6.84%, Minimum: 6.82%, Maximum: 6.89%
+
+      - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A
+
+      - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%
+
+      [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
+
+      #aws-status-check #haserver-1
+    post_delay: 4
+  - user_id: statusbot
+    text: >
+      ### System Health Status HA Server 2:
+
+      - System Status:  OK
+
+      - Instance Status:  Running
+
+      - CPU Utilization:  Average: 1.08%, Minimum: 0.00%, Maximum: 14.22%
+
+      - Memory Utilization:  Average: 5.42%, Minimum: 5.40%, Maximum: 5.47%
+
+      - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A
+
+      - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%
+
+      [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
+
+      #aws-status-check #haserver-2
+    post_delay: 2
+  - user_id: demobot
+    attachments:
+      - title: >
+          Monitoring Demo Is Complete
+        titleLink:
+        color: >
+          #213f6b
+        author_name: DemoBot
+        fields:
+          - title:
+            value: Thanks for watching this demo! To watch another demo, return to ~town-square. To learn more about setting up your own Mattermost environment or to request your own trial site, click [here](https://mattermost.com/trial/).
+            short: False
+
+  ###############################################################

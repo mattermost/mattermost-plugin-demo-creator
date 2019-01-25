@@ -17,13 +17,11 @@ func NewScriptManager(api plugin.API, scriptDir string) (*ScriptManager, error) 
 	sm.api = api
 	sm.scriptDir = scriptDir
 	sm.scripts = make(map[string]Script)
-	sm.runner = make(map[string]*ScriptRunner)
+	sm.runner = sync.Map{}
 	err := sm.loadScriptsFromDir()
 	if err != nil {
 		return nil, err
 	}
-
-	sm.runnerLock = &sync.RWMutex{}
 
 	rand.Seed(time.Now().Unix())
 
@@ -35,8 +33,7 @@ type ScriptManager struct {
 	botId      string
 	scriptDir  string
 	scripts    map[string]Script
-	runner     map[string]*ScriptRunner
-	runnerLock *sync.RWMutex
+	runner     sync.Map
 }
 
 func (sm *ScriptManager) SetBotId(id string) {
@@ -62,6 +59,7 @@ func (sm *ScriptManager) GetScriptCount() int {
 }
 
 func (sm *ScriptManager) StartScript(teamId, userId, scriptId string) {
+	sm.api.LogDebug(fmt.Sprintf("Starting new Runner for script id %s for team %s and user %s", scriptId, teamId, userId))
 
 	script, err := sm.GetScript(scriptId)
 
@@ -77,9 +75,7 @@ func (sm *ScriptManager) StartScript(teamId, userId, scriptId string) {
 		return
 	}
 
-	sm.runnerLock.Lock()
-	sm.runner[runner.GetChannelId()] = runner
-	sm.runnerLock.Unlock()
+	sm.runner.Store(runner.GetChannelId(), runner)
 
 	err = runner.Start()
 
@@ -88,15 +84,21 @@ func (sm *ScriptManager) StartScript(teamId, userId, scriptId string) {
 		return
 	}
 
+	sm.api.LogDebug(fmt.Sprintf("Stopping runner for script id %s for team %s and user %s", scriptId, teamId, userId))
 }
 
 func (sm *ScriptManager) TriggerResponse(responseId, channelId, userId string) error{
-	sm.runnerLock.RLock()
-	runner, ok := sm.runner[channelId]
+	sm.api.LogDebug(fmt.Sprintf("Starting response trigger for reaction id %s for team %s and user %s", responseId, channelId, userId))
+
+	data, ok := sm.runner.Load(channelId)
 
 	if !ok {
 		return errors.New(fmt.Sprintf("No runner found for given channel id: %s", channelId))
 	}
+
+	runner := data.(*ScriptRunner)
+
+	sm.api.LogDebug(fmt.Sprintf("Stopping response trigger for reaction id %s for team %s and user %s", responseId, channelId, userId))
 
 	return runner.TriggerResponse(responseId, userId)
 }

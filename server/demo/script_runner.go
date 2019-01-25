@@ -60,12 +60,16 @@ func (sr *ScriptRunner) Start() error {
 			}
 		}
 
-		data, err2 := ioutil.ReadFile("plugins/com.dschalla.matterdemo-plugin/pictures/" + user.Id + ".jpg")
+		data, err2 := ioutil.ReadFile("plugins/com.dschalla.matterdemo-plugin/pictures/" + user.Id + ".png")
 
 		if err2 != nil {
 			sr.api.LogError(fmt.Sprintf("Error setting profile picture: %s", err2))
 		} else {
-			sr.api.SetProfileImage(systemUser.Id, data)
+			err := sr.api.SetProfileImage(systemUser.Id, data)
+			if err != nil {
+				sr.api.LogError(fmt.Sprintf("Error setting profile picture: %s", err))
+				return err
+			}
 		}
 
 		teamMember, _ := sr.api.GetTeamMember(sr.teamId, systemUser.Id)
@@ -74,16 +78,22 @@ func (sr *ScriptRunner) Start() error {
 			_, err := sr.api.CreateTeamMember(sr.teamId, systemUser.Id)
 
 			if err != nil {
-				sr.api.LogError(fmt.Sprintf("Error creating team member for Script: %s", err.Message))
+				sr.api.LogError(fmt.Sprintf("Error creating team member for Script: %s", err))
 				continue
 			}
 		}
 
-		sr.api.AddChannelMember(sr.channelId, systemUser.Id)
+		_, err = sr.api.AddChannelMember(sr.channelId, systemUser.Id)
+		if err != nil {
+			sr.api.LogError(fmt.Sprintf("Error creating channel member for Script: %s", err))
+		}
 		sr.script.Users[i].SystemId = systemUser.Id
 	}
 
-	sr.api.AddChannelMember(sr.channelId, sr.creatorId)
+	_, err := sr.api.AddChannelMember(sr.channelId, sr.creatorId)
+	if err != nil {
+		sr.api.LogError(fmt.Sprintf("Error creating channel member for Script: %s", err))
+	}
 
 	/*
 	// Disabled for now
@@ -94,7 +104,10 @@ func (sr *ScriptRunner) Start() error {
 	sr.api.LogDebug("Starting Post Generation...")
 
 	for _, message := range sr.script.Messages {
-		sr.sendMessage(message, "")
+		err := sr.sendMessage(message, "")
+		if err != nil {
+			sr.api.LogError(fmt.Sprintf("Error creating message for Script: %s", err))
+		}
 	}
 
 	return nil
@@ -105,10 +118,14 @@ func (sr *ScriptRunner) GetChannelId() string {
 }
 
 func (sr *ScriptRunner) createChannel() error {
+	var err *model.AppError
 
 	channelExists, _ := sr.api.GetChannelByName(sr.teamId, sr.script.Channel.Id+sr.randomNr, false)
 	if channelExists != nil {
-		sr.api.DeleteChannel(channelExists.Id)
+		err = sr.api.DeleteChannel(channelExists.Id)
+		if err != nil {
+			sr.api.LogError(fmt.Sprintf("Error deleting channel for Script: %s", err))
+		}
 	}
 
 	channel := &model.Channel{
@@ -119,7 +136,6 @@ func (sr *ScriptRunner) createChannel() error {
 		Type:        model.CHANNEL_PRIVATE,
 	}
 
-	var err *model.AppError
 	channel, err = sr.api.CreateChannel(channel)
 
 	if err != nil {
@@ -159,7 +175,11 @@ func (sr *ScriptRunner) sendScriptProlog() {
 			Text:       "Hello @" + user.Username + "! ",
 		},
 	})
-	sr.api.CreatePost(post)
+
+	_, err := sr.api.CreatePost(post)
+	if err != nil {
+		sr.api.LogError(fmt.Sprintf("Error creating prolog post for Script: %s", err))
+	}
 }
 
 func (sr *ScriptRunner) sendMessage(message ScriptMessage, rootId string) error {
@@ -178,6 +198,7 @@ func (sr *ScriptRunner) sendMessage(message ScriptMessage, rootId string) error 
 		slackAttachment.TitleLink = attachment.TitleLink
 		slackAttachment.AuthorName = attachment.AuthorName
 		slackAttachment.Color = attachment.Color
+		slackAttachment.Text = attachment.Text
 
 		for _, field := range attachment.Fields {
 			slackAttachment.Fields = append(slackAttachment.Fields, &model.SlackAttachmentField{
@@ -213,10 +234,6 @@ func (sr *ScriptRunner) sendMessage(message ScriptMessage, rootId string) error 
 
 	post.UserId = user.SystemId
 
-	if user.Bot {
-		post.AddProp("from_webhook", "true")
-	}
-
 	post, err := sr.api.CreatePost(post)
 
 	if err != nil {
@@ -228,7 +245,10 @@ func (sr *ScriptRunner) sendMessage(message ScriptMessage, rootId string) error 
 	time.Sleep(time.Second * time.Duration(message.PostDelay))
 
 	for _, reply := range message.Replies {
-		sr.sendMessage(reply, post.Id)
+		err := sr.sendMessage(reply, post.Id)
+		if err != nil {
+			sr.api.LogError(fmt.Sprintf("Error creating post for Script: %s", err))
+		}
 	}
 
 	return nil
@@ -250,11 +270,14 @@ func (sr *ScriptRunner) createReactions (postId string, reactions []ScriptReacti
 			}
 
 			r := &model.Reaction{
-				UserId:    user.Id,
+				UserId:    user.SystemId,
 				PostId:    postId,
 				EmojiName: reaction.Id,
 			}
-			sr.api.AddReaction(r)
+			_, err := sr.api.AddReaction(r)
+			if err != nil {
+				sr.api.LogError(fmt.Sprintf("Error creating reaction for Script: %s", err))
+			}
 		}(reaction)
 	}
 }

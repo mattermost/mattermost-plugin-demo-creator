@@ -72,9 +72,9 @@ endif
 server: server/.depensure
 ifneq ($(HAS_SERVER),)
 	mkdir -p server/dist;
-	cd server && env GOOS=linux GOARCH=amd64 $(GO) build -gcflags "all=-N -l" -o dist/plugin-linux-amd64;
-	cd server && env GOOS=darwin GOARCH=amd64 $(GO) build -gcflags "all=-N -l" -o dist/plugin-darwin-amd64;
-	cd server && env GOOS=windows GOARCH=amd64 $(GO) build -gcflags "all=-N -l" -o dist/plugin-windows-amd64.exe;
+	cd server && env GOOS=linux GOARCH=amd64 $(GO) build -o dist/plugin-linux-amd64;
+	cd server && env GOOS=darwin GOARCH=amd64 $(GO) build -o dist/plugin-darwin-amd64;
+	cd server && env GOOS=windows GOARCH=amd64 $(GO) build -o dist/plugin-windows-amd64.exe;
 endif
 
 ## Ensures NPM dependencies are installed without having to run this all the time.
@@ -103,7 +103,7 @@ ifneq ($(HAS_SERVER),)
 	mkdir dist/$(PLUGIN_ID)/scripts/;
 	mkdir dist/$(PLUGIN_ID)/pictures/;
 	cp server/test/scripts/*.yml dist/$(PLUGIN_ID)/scripts/;
-	cp server/test/pictures/*.jpg dist/$(PLUGIN_ID)/pictures/;
+	cp server/test/pictures/*.png dist/$(PLUGIN_ID)/pictures/;
 endif
 ifneq ($(HAS_WEBAPP),)
 	mkdir -p dist/$(PLUGIN_ID)/webapp/dist;

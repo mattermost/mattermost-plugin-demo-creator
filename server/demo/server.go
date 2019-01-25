@@ -61,13 +61,19 @@ func (s *Server) RegisterBotUser() error {
 		}
 	}
 
-	data, err2 := ioutil.ReadFile("plugins/com.dschalla.matterdemo-plugin/pictures/demobot.jpg")
+	data, err2 := ioutil.ReadFile("plugins/com.dschalla.matterdemo-plugin/pictures/demobot.png")
 
 	if err2 != nil {
+		s.api.LogError(fmt.Sprintf("Error reading bot picture: %s", err))
 		return err
 	}
 
-	s.api.SetProfileImage(s.botUser.Id, data)
+	err = s.api.SetProfileImage(s.botUser.Id, data)
+	if err != nil {
+		s.api.LogError(fmt.Sprintf("Error setting profile picture: %s", err))
+		return err
+	}
+
 	_, err = s.api.UpdateUser(s.botUser)
 	if err != nil {
 		return err
@@ -102,21 +108,23 @@ func (s *Server) SendWelcomePost(channelId string) *model.Post{
 	channelMember, _ := s.api.GetChannelMember(channelId, s.botUser.Id)
 
 	if channelMember == nil {
-		s.api.AddChannelMember(channelId, s.botUser.Id)
+		_, err := s.api.AddChannelMember(channelId, s.botUser.Id)
+		if err != nil {
+			s.api.LogError(fmt.Sprintf("Error adding channel member in welcome post: %s", err))
+		}
 	}
 
 	url := *s.api.GetConfig().ServiceSettings.SiteURL
 
 	s.api.LogInfo("PREPARING TO SEND DEMOBOT INTRODUCTION")
 	post.Props = model.StringInterface{}
-	post.AddProp("from_webhook", "true")
 
 	attachments := []*model.SlackAttachment{
 		{
 			Title:      "DemoBot Introduction",
 			AuthorName: "DemoBot",
 			AuthorIcon: "http://www.mattermost.org/wp-content/uploads/2016/04/icon_WS.png",
-			Text:       "Welcome to Palo Alto Bank!  Palo Alto Bank is a simulation of Mattermost in action.  We are going to give you a tour of the product and show you why Mattermost is the premier choice to making your team more productive through high trust collaboration.\nTo get started, choose a demo from the options below and click “Start Demo”. You will be shown a short example scenario to give you some ideas on how other teams use Mattermost. Feel free to click around and interact with what you see! If you need more time for your organization to try Mattermost, please request a [trial](https://mattermost.com/trial/). ",
+			Text:       "Welcome to Palo Alto Bank!  Palo Alto Bank is a simulation of Mattermost in action.  We are going to give you a tour of the product and show you why Mattermost is the premier choice to making your team more productive through high trust collaboration.\n\nTo get started, choose a demo from the options below and click “Start Demo”. You will be shown a short example scenario to give you some ideas on how other teams use Mattermost. Feel free to click around and interact with what you see! If you need more time for your organization to try Mattermost, please request a [trial](https://mattermost.com/trial/). ",
 		},
 	}
 
@@ -152,15 +160,21 @@ func (s *Server) SendWelcomePost(channelId string) *model.Post{
 
 	config := s.api.GetConfig()
 	*config.TeamSettings.ExperimentalTownSquareIsReadOnly = false
-	s.api.SaveConfig(config)
+	err := s.api.SaveConfig(config)
+	if err != nil {
+		s.api.LogError(fmt.Sprintf("Error updating config in welcome post: %s", err))
+	}
 
-	post, err := s.api.CreatePost(post)
-
-	*config.TeamSettings.ExperimentalTownSquareIsReadOnly = true
-	s.api.SaveConfig(config)
+	post, err = s.api.CreatePost(post)
 
 	if err != nil {
 		s.api.LogError(fmt.Sprintf("Error creating welcome post: %s", err))
+	}
+
+	*config.TeamSettings.ExperimentalTownSquareIsReadOnly = true
+	err = s.api.SaveConfig(config)
+	if err != nil {
+		s.api.LogError(fmt.Sprintf("Error updating config in welcome post: %s", err))
 	}
 
 	return post
@@ -171,12 +185,15 @@ func (s *Server) StartScript(teamId, userId, scriptId string) {
 }
 
 func (s *Server) TriggerResponse(channelId, userId, scriptId, responseId string) error {
+	s.api.LogDebug(fmt.Sprintf("Starting new Runner for script id %s for team %s and user %s", channelId, userId, responseId))
+
 	err := s.scriptManager.TriggerResponse(responseId, channelId, userId)
 
 	if err != nil {
 		s.api.LogError(fmt.Sprintf("Error triggering response: %s", err))
 		return err
 	}
+	s.api.LogDebug(fmt.Sprintf("Starting new Runner for script id %s for team %s and user %s", channelId, userId, responseId))
 
 	return nil
 }

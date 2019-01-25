@@ -40,6 +40,7 @@ type ScriptAttachment struct {
 	Color       string
 	AuthorName  string `yaml:"author_name"`
 	AuthorImage string `yaml:"author_image"`
+	Text 		string
 	Fields      []ScriptAttachmentField
 	Actions     []ScriptAttachmentAction
 }
