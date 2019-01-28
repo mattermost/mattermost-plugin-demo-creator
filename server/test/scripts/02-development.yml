@@ -39,10 +39,10 @@ users:
   - id: JenkinsBot
     name: Jenkins Bot
     bot: true
-  - id: JiraBot
+  - id: jirabot
     name: Jira Bot
     bot: true
-  - id: GithubBot
+  - id: githubbot
     name: Github Bot
     bot: true
 messages:
@@ -152,7 +152,7 @@ messages:
           Of course.
         post_delay: 10
       - user_id: llloyd
-        text: >
+        text: |
           Ok, I was able to reproduce and here is what I found:
 
           Issue is a regression- it was not an issue in the previous release. Here are the files I tested with:
@@ -162,7 +162,7 @@ messages:
           |       .pdf | ![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg =25 "Failed")|
           |       .txt |![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg =25 "Failed")|
           |       .docx|![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg =25 "Failed")|
-          |       .pptx |![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg  =25 "Failed") |
+          |       .pptx |![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg  =25 "Failed")|
 
           Which dev worked last on this area?  Can they pinpoint where this issue was introduced?
       - user_id: aharrington
@@ -294,12 +294,12 @@ messages:
   - user_id: demobot
     attachments:
       - title: >
-          Development Demo Is Complete :tada:
+          Development Demo Is Complete
         titleLink:
         color: >
           #213f6b
         author_name: DemoBot
         fields:
           - title:
-            value: Thanks for watching this demo! To watch another demo, return to ~town-square. To learn more about setting up your own Mattermost environment or to request your own trial site, click [here](https://mattermost.com/trial/).
-            short: False
+            value: Thanks for watching this demo :tada:! To watch another demo, return to ~town-square. To learn more about setting up your own Mattermost environment or to request your own trial site, click [here](https://mattermost.com/trial/).
+            short: false

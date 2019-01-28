@@ -42,7 +42,7 @@ messages:
         fields:
           - title:
             value: Welcome, @channel! Keeping a pulse on real-time activities of your environment is key to keeping it running smoothly and maintaining uptime.  Hooks into crucial systems post the heartbeat of your systems and alerts allow the team to take action before issues arise.
-            short: False
+            short: false
     post_delay: 10
   - user_id: statusbot
     text: >
@@ -62,7 +62,7 @@ messages:
 
       [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
 
-      #aws-status-check #appserver-1
+      #aws-status-check #appserver1
     post_delay: 4
   - user_id: statusbot
     text: >
@@ -82,7 +82,7 @@ messages:
 
       [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
 
-      #aws-status-check #appserver-2
+      #aws-status-check #appserver2
     post_delay: 5
   - user_id: authenticationbot
     text: >
@@ -94,11 +94,11 @@ messages:
       - user_id: emaxwell
         text: >
           This was me- used an old password to review our Prometheus Monitoring Dashboard.  This system’s being upgraded to SSO so shouldn’t be a recurring issue.
-          Post_delay: 4
+        post_delay: 4
       - user_id: sray
         text: >
           ![Denied!](https://media.giphy.com/media/3ohzdYt5HYinIx13ji/giphy.gif)
-          Post_delay: 4
+        post_delay: 4
   - user_id: billingbot
     text: >
       ## New Billing Alarm: AWS Service Charge (Total)
@@ -140,7 +140,7 @@ messages:
 
       [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
 
-      #aws-status-check #appserver-1
+      #aws-status-check #appserver1
     post_delay: 4
   - user_id: statusbot
     text: >
@@ -160,17 +160,17 @@ messages:
 
       [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
 
-      #aws-status-check #Appserver-2
+      #aws-status-check #appserver2
     post_delay: 2
   - user_id: demobot
     attachments:
       - title: >
-          Monitoring Demo Is Complete :tada:
+          Monitoring Demo Is Complete 
         titleLink:
         color: >
           #213f6b
         author_name: DemoBot
         fields:
           - title:
-            value: Thanks for watching this demo! To watch another demo, return to ~town-square. To learn more about setting up your own Mattermost environment or to request your own trial site, click [here](https://mattermost.com/trial/).
-            short: False
+            value: Thanks for watching this demo :tada:! To watch another demo, return to ~town-square. To learn more about setting up your own Mattermost environment or to request your own trial site, click [here](https://mattermost.com/trial/).
+            short: false

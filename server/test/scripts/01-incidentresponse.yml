@@ -44,8 +44,8 @@ messages:
         author_name: DemoBot
         fields:
           - title:
-            value: Time is crucial in a incident response scenario.  Within minutes the team is automatically alerted to an issue and taking action without the effort of manual coordination.  Keeping eveyone informed of progress is made simple and resolution times are shortened by many critical minutes.
-            short: False
+            value: Time is crucial when responding to issues such as security intrusions. Bots alert relevant team members when exceptions are detected. Mattermost allows teams to track resolution steps and keep everyone informed, which shortens resolution times by many critical minutes.
+            short: false
     post_delay: 10
   - user_id: incidentbot
     attachments:
@@ -53,7 +53,7 @@ messages:
           Email Received - Suspected Phishing Attempt
         color: >
           #ff0000
-        text: >
+        text: |
           **Header Parsed:**
 
           ```
@@ -193,15 +193,15 @@ messages:
   - user_id: demobot
     attachments:
       - title: >
-          Incident Response Demo Is Complete :tada:
+          Incident Response Demo Is Complete 
         titleLink:
         color: >
           #213f6b
         author_name: DemoBot
         fields:
           - title:
-            value: Thanks for watching this demo! To watch another demo, return to ~town-square. To learn more about setting up your own Mattermost environment or to request your own trial site, click [here](https://mattermost.com/trial/).
-            short: False
+            value: Thanks for watching this demo :tada:! To watch another demo, return to ~town-square. To learn more about setting up your own Mattermost environment or to request your own trial site, click [here](https://mattermost.com/trial/).
+            short: false
 responses:
   - id: response_1
     message:
