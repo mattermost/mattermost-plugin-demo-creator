@@ -63,7 +63,7 @@ func (sr *ScriptRunner) Start() error {
 		data, err2 := ioutil.ReadFile("plugins/com.dschalla.matterdemo-plugin/pictures/" + user.Id + ".png")
 
 		if err2 != nil {
-			sr.api.LogError(fmt.Sprintf("Error setting profile picture: %s", err2))
+			sr.api.LogError(fmt.Sprintf("Error reading profile picture: %s", err2))
 		} else {
 			err := sr.api.SetProfileImage(systemUser.Id, data)
 			if err != nil {
@@ -100,7 +100,7 @@ func (sr *ScriptRunner) Start() error {
 	sr.sendScriptProlog()
 	time.Sleep(time.Second * time.Duration(10))
 	 */
-
+	time.Sleep(time.Second * time.Duration(2))
 	sr.api.LogDebug("Starting Post Generation...")
 
 	for _, message := range sr.script.Messages {
@@ -130,7 +130,7 @@ func (sr *ScriptRunner) createChannel() error {
 
 	channel := &model.Channel{
 		Name:        sr.script.Channel.Id + sr.randomNr,
-		DisplayName: sr.script.Channel.Name + " (#" + sr.randomNr + ")",
+		DisplayName: sr.script.Channel.Name,
 		Header:      sr.script.Channel.Description,
 		TeamId:      sr.teamId,
 		Type:        model.CHANNEL_PRIVATE,

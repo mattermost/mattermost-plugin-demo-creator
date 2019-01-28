@@ -124,7 +124,7 @@ func (s *Server) SendWelcomePost(channelId string) *model.Post{
 			Title:      "DemoBot Introduction",
 			AuthorName: "DemoBot",
 			AuthorIcon: "http://www.mattermost.org/wp-content/uploads/2016/04/icon_WS.png",
-			Text:       "Welcome to Palo Alto Bank!  Palo Alto Bank is a simulation of Mattermost in action.  We are going to give you a tour of the product and show you why Mattermost is the premier choice to making your team more productive through high trust collaboration.\n\nTo get started, choose a demo from the options below and click “Start Demo”. You will be shown a short example scenario to give you some ideas on how other teams use Mattermost. Feel free to click around and interact with what you see! If you need more time for your organization to try Mattermost, please request a [trial](https://mattermost.com/trial/). ",
+			Text:       "Welcome to Acme Bank! :wave: Acme Bank is a simulation of Mattermost in action. We are going to give you a tour of the product and show you why Mattermost is the premier choice to making your team more productive through high trust collaboration.\n\nTo get started, choose a demo from the options below and click “Start Demo”. You will be shown a short example scenario to give you some ideas on how other teams use Mattermost. Feel free to click around and interact with what you see! If you need more time for your organization to try Mattermost, please request a [trial](https://mattermost.com/trial/).",
 		},
 	}
 

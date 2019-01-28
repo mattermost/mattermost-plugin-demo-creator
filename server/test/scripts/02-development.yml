@@ -3,13 +3,11 @@ name: Development
 priority: 2
 description: >
   **Description:** Check in on the release team managing complex release processes with checklists and shared resources.
-
-  **Audience:** R&D, Project Management         **Length:** 2 minutes 
 channel:
   id: development
   name: Development
   description: >
-    Ready, Set, Release! Tracking of release processes for the product development team of Palo Alto.
+    Ready, Set, Release! Tracking of release processes for the product development team of Acme Bank.
 users:
   - id: demobot
     name: Mattermost Demo Bot
@@ -38,8 +36,14 @@ users:
   - id: llloyd
     name: Laurell Lloyd
     position: Quality Assurance
-  - id: releasebot
-    name: Release Bot
+  - id: JenkinsBot
+    name: Jenkins Bot
+    bot: true
+  - id: JiraBot
+    name: Jira Bot
+    bot: true
+  - id: GithubBot
+    name: Github Bot
     bot: true
 messages:
   - user_id: demobot
@@ -52,7 +56,7 @@ messages:
         author_name: DemoBot
         fields:
           - title:
-            value: Welcome, @channel! Managing tasks and cross-departmental collaboration for complex processes requires coordination and abundant information sharing. Mattermost provides a variety of methods to help facilitate clear communications in defined and ad hoc processes.
+            value: Welcome, @channel! Managing tasks and collaboration for complex processes requires coordination and abundant information sharing. Mattermost provides a variety of methods to help facilitate clear communications and keep process on track.
             short: False
     post_delay: 10
   - user_id: eparker
@@ -114,70 +118,85 @@ messages:
 
           - [x] Update existing tickets or create new ones for the next release
         post_delay: 6
+  - user_id: Jenkins Bot
+    attachments:
+      - title: >
+          Release Built Complete
+        titleLink:
+        color: >
+          #213f6b
+        author_name: JenkinsBot
+        fields:
+          - title:
+            value: Build successfully completed.
+            short: False
+  - user_id: aharrington
+    text: >
+      There have been two separate reports by customers of broken file uploads.  I haven’t been able to reproduce, but I think we need to check into this ASAP to make sure there is not something that was introduced in this last release.
+  - user_id: aharrington
+    text: >
+      @QA, can you please help try to reproduce the issue? Here are some JS Errors one customer reported 
+  - user_id: aharrington
+    text: >
+      Errors:
+
+      JS Errors: 
+      ```
+      2018-12-16T17:13:40.107-0600    error    web/context.go:60    msg: Uncaught TypeError: Cannot read property ‘toFixed’ of undefined row: 36 col: 79222 stack: TypeError: Cannot read property ‘toFixed’ of undefined url: https://host.example.com/static/main.495bc49800ee9aa7d2f3.js    {“path”: “/api/v4/logs”, “request_id”: “1snjgfwwx3yq9xhppx6eaqrhac”, “ip_addr”: “192.168.10.115”, “user_id”: “6w9cdk4adprj3fjprgtzesbt7h”, “method”: “POST”, “err_where”: “client”, “http_code”: 0, “err_details”: “”} 
+
+      ```
+    post_delay: 6
+    replies:
+      - user_id: llloyd
+        text: >
+          Of course.
+        post_delay: 10
+      - user_id: llloyd
+        text: >
+          Ok, I was able to reproduce and here is what I found:
+
+          Issue is a regression- it was not an issue in the previous release. Here are the files I tested with:
+
+          |       Attachment File Type  | Pass or Fail |
+          |       :----------------------------- |:---------------:|
+          |       .pdf | ![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg =25 "Failed")|
+          |       .txt |![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg =25 "Failed")|
+          |       .docx|![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg =25 "Failed")|
+          |       .pptx |![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg  =25 "Failed") |
+
+          Which dev worked last on this area?  Can they pinpoint where this issue was introduced?
       - user_id: aharrington
         text: >
-          There have been two separate reports by customers of broken file uploads.  I haven’t been able to reproduce, but I think we need to check into this ASAP to make sure there is not something that was introduced in this last release.
-      - user_id: aharrington
-        text: >
-          @QA, can you please help try to reproduce the issue? Here are some JS Errors one customer reported and here is a full stack trace from the other report
-      - user_id: aharrington
-        text: >
-          Errors:
+          Thank you so much for your quick response @llloyd.
 
-          JS Errors: ```2018-12-16T17:13:40.107-0600    error    web/context.go:60    msg: Uncaught TypeError: Cannot read property ‘toFixed’ of undefined row: 36 col: 79222 stack: TypeError: Cannot read property ‘toFixed’ of undefined url: https://host.example.com/static/main.495bc49800ee9aa7d2f3.js    {“path”: “/api/v4/logs”, “request_id”: “1snjgfwwx3yq9xhppx6eaqrhac”, “ip_addr”: “192.168.10.115”, “user_id”: “6w9cdk4adprj3fjprgtzesbt7h”, “method”: “POST”, “err_where”: “client”, “http_code”: 0, “err_details”: “”}```
-
-          Stack Trace:
-
-          ```react-dom.production.min.js:171 TypeError: Cannot read property 'toFixed' of undefined
-          at t.value (file_progress_preview.jsx:31)
-          at Ka (react-dom.production.min.js:156)
-          at Qa (react-dom.production.min.js:155)
-          at $a (react-dom.production.min.js:162)
-          at Oi (react-dom.production.min.js:192)
-          at Ii (react-dom.production.min.js:193)
-          at co (react-dom.production.min.js:205)
-          at uo (react-dom.production.min.js:204)
-          at Ui (react-dom.production.min.js:200)
-          at Object.enqueueSetState (react-dom.production.min.js:130)
-          ai @ react-dom.production.min.js:171
-          n.callback @ react-dom.production.min.js:179
-          ra @ react-dom.production.min.js:125
-          na @ react-dom.production.min.js:125
-          lo @ react-dom.production.min.js:214
-          co @ react-dom.production.min.js:205
-          uo @ react-dom.production.min.js:204
-          at Object.enqueueSetState (react-dom.production.min.js:130)```
+          @sbowen, I think you were working on this feature?  I have created a ticket to track the work.
         post_delay: 6
-        replies:
-          - user_id: llloyd
-            text: >
-              Of course.
-            post_delay: 10
-          - user_id: llloyd
-            text: >
-              Ok, I was able to reproduce and here is what I found:
-
-              Issue is a regression- it was not an issue in the previous release. Here are the files I tested with:
-
-               |       Attachment File Type  | Pass or Fail |
-               |       :----------------------------- |:---------------:|
-               |       .pdf | ![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg =25 "Failed")|
-               |       .txt |![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg =25 "Failed")|
-               |       .docx|![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg =25 "Failed")|
-               |       .pptx |![Failed](http://chittagongit.com//images/failed-icon/failed-icon-6.jpg  =25 "Failed") |
-
-              Which dev worked last on this area?  Can they pinpoint where this issue was introduced?
-          - user_id: aharrington
-            text: >
-              Thank you so much for your quick response @llloyd.  @sbowen, I think you were working on this feature?  I have created a ticket to track the work.
-            post_delay: 6
+  - user_id: JiraBot
+    attachments:
+      - title: >
+          Ticket Created
+        titleLink:  https://mattermost.atlassian.net/
+        color: >
+          #213f6b
+        author_name: JiraBot
+        fields:
+          - title: Description
+            value: Bug Ticket Created - *Broken File Uploads*
+            short: True
+          - title: Status
+            value: Open
+            short: True
+          - title: Ticket Number
+            value: >
+              [MM-12345](https://mattermost.atlassian.net/)
+            short: True
   - user_id: sbowen
     text: >
       Yes, bummer.  That is something I worked on.  I will get a PR submitted for a fix in the next hour or so.
     post_delay: 6
   - user_id: aharrington
     text: >
-      Great.  I think we will need to put out a dot release.  This is a core area of the app that could be really frustrustating for a lot of users if we don’t address right away.
+      Great.  I think we will need to put out a dot release.  This is a core area of the app that could be really frustrating if we don’t address right away.
 
       cc:// @eparker
     post_delay: 6
@@ -186,10 +205,26 @@ messages:
         text: >
           On it.
         post_delay: 12
+    reactions:
+      - user_id: eparker
+        id: thumbsup
+        delay: 3
   - user_id: sbowen
     text: >
       Fix has been submitted.  Can I get a review quick from my other devs?
     post_delay: 6
+  - user_id: GithubBot
+    attachments:
+      - title: >
+          PR Sumbmitted 
+        titleLink:
+        color: >
+          #213f6b
+        author_name: GithubBot
+        fields:
+          - title: Description
+            value: Broken File Uploads Fix
+            short: true
     replies:
       - user_id: gjackson
         text: >
@@ -216,6 +251,10 @@ messages:
         text: >
           Looks good to me as well.
         post_delay: 5
+      - user_id: aharrington
+        text: >
+          ![Thank You](https://media.giphy.com/media/3ohs7JG6cq7EWesFcQ/giphy.gif) 
+        post_delay: 5
   - user_id: eparker
     text: >
       ### Dot Release
@@ -236,10 +275,26 @@ messages:
       5. Marketing:
        - Prepare blog post for mattermost.com and Twitter announcement, and send to PM to review.
     post_delay: 6
+    reactions:
+      - user_id: aharrington
+        id: thumbsup
+        delay: 3
+      - user_id: llloyd
+        id: thumbsup
+        delay: 1
+      - user_id: cberry
+        id: muscle
+        delay: 3
+      - user_id: klin
+        id: muscle
+        delay: 3
+      - user_id: gjackson
+        id: fire
+        delay: 3
   - user_id: demobot
     attachments:
       - title: >
-          Development Demo Is Complete
+          Development Demo Is Complete :tada:
         titleLink:
         color: >
           #213f6b
@@ -248,5 +303,3 @@ messages:
           - title:
             value: Thanks for watching this demo! To watch another demo, return to ~town-square. To learn more about setting up your own Mattermost environment or to request your own trial site, click [here](https://mattermost.com/trial/).
             short: False
-
-  ########################################

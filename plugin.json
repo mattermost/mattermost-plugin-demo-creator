@@ -2,7 +2,7 @@
     "id": "com.dschalla.matterdemo-plugin",
     "name": "MatterDemo Plugin",
     "description": "This plugin serves as a starting point for writing a Mattermost plugin.",
-    "version": "0.0.9",
+    "version": "1.0.0",
     "server": {
         "executables": {
             "linux-amd64": "server/dist/plugin-linux-amd64",

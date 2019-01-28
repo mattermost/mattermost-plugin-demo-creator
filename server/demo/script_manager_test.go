@@ -12,7 +12,7 @@ func TestNewScriptManager(t *testing.T) {
 		t.Errorf("Expected nil, got %s", err)
 	}
 
-	expectedCount := 6
+	expectedCount := 3
 	actualCount := sm.GetScriptCount()
 
 	if expectedCount != actualCount {
@@ -26,14 +26,6 @@ func TestNewScriptManager(t *testing.T) {
 		{
 			"incident_response",
 			"Incident Response",
-		},
-		{
-			"monitoring",
-			"Monitoring",
-		},
-		{
-			"usingMM",
-			"Using Mattermost",
 		},
 	}
 

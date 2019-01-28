@@ -3,8 +3,6 @@ name: Monitoring
 priority: 3
 description: >
   **Description:** Keep up to the minute with tracking of real-time system events and manage issues before they arise.
-
-  **Audience:** DevOps         **Length:** 1 minute
 channel:
   id: monitoring
   name: Monitoring
@@ -48,7 +46,7 @@ messages:
     post_delay: 10
   - user_id: statusbot
     text: >
-      ## System Health Status HA Server 1:
+      ## System Health Status App Server 1:
 
       - System Status:  OK
 
@@ -64,11 +62,11 @@ messages:
 
       [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
 
-      #aws-status-check #haserver-1
+      #aws-status-check #appserver-1
     post_delay: 4
   - user_id: statusbot
     text: >
-      ## System Health Status HA Server 2:
+      ## System Health Status App Server 2:
 
       - System Status:  OK
 
@@ -84,7 +82,7 @@ messages:
 
       [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
 
-      #aws-status-check #haserver-2
+      #aws-status-check #appserver-2
     post_delay: 5
   - user_id: authenticationbot
     text: >
@@ -96,46 +94,11 @@ messages:
       - user_id: emaxwell
         text: >
           This was me- used an old password to review our Prometheus Monitoring Dashboard.  This system’s being upgraded to SSO so shouldn’t be a recurring issue.
-  - user_id: statusbot
-    text: >
-      ### System Health Status HA Server 1:
-
-      - System Status:  OK
-
-      - Instance Status:  Running
-
-      - CPU Utilization:  Average: 1.06%, Minimum: 0.00%, Maximum: 15.22%
-
-      - Memory Utilization:  Average: 6.84%, Minimum: 6.82%, Maximum: 6.89%
-
-      - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A
-
-      - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%
-
-      [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
-
-      #aws-status-check #haserver-1
-    post_delay: 5
-  - user_id: statusbot
-    text: >
-      ### System Health Status HA Server 2:
-
-      - System Status:  OK
-
-      - Instance Status:  Running
-
-      - CPU Utilization:  Average: 1.08%, Minimum: 0.00%, Maximum: 14.22%
-
-      - Memory Utilization:  Average: 5.42%, Minimum: 5.40%, Maximum: 5.47%
-
-      - Swap Utilization:  Average: N/A, Minimum: N/A, Maximum: N/A
-
-      - Disk Space Utilization: Average: 9.69%, Minimum: 9.69%, Maximum: 9.69%
-
-      [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
-
-      #aws-status-check #haserver-2
-    post_delay: 3
+          Post_delay: 4
+      - user_id: sray
+        text: >
+          ![Denied!](https://media.giphy.com/media/3ohzdYt5HYinIx13ji/giphy.gif)
+          Post_delay: 4
   - user_id: billingbot
     text: >
       ## New Billing Alarm: AWS Service Charge (Total)
@@ -154,10 +117,14 @@ messages:
       - user_id: jbanks
         text: >
           A reallocation of the S3s should get us back to our utilization comfort zone. In our next meeting let’s get a plan for sketched out for identifying testing and other usage that can be reassigned to our production environments.
-        post_delay: 4
+        post_delay: 3
+      - user_id: sray
+        text: >
+          :thumbsup: 
+        post_delay: 9
   - user_id: statusbot
     text: >
-      ### System Health Status HA Server 1:
+      ### System Health Status App Server 1:
 
       - System Status:  OK
 
@@ -173,11 +140,11 @@ messages:
 
       [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
 
-      #aws-status-check #haserver-1
+      #aws-status-check #appserver-1
     post_delay: 4
   - user_id: statusbot
     text: >
-      ### System Health Status HA Server 2:
+      ### System Health Status App Server 2:
 
       - System Status:  OK
 
@@ -193,12 +160,12 @@ messages:
 
       [AWS Monitoring Dashboard](https://console.aws.amazon.com/ec2/)
 
-      #aws-status-check #haserver-2
+      #aws-status-check #Appserver-2
     post_delay: 2
   - user_id: demobot
     attachments:
       - title: >
-          Monitoring Demo Is Complete
+          Monitoring Demo Is Complete :tada:
         titleLink:
         color: >
           #213f6b
@@ -207,5 +174,3 @@ messages:
           - title:
             value: Thanks for watching this demo! To watch another demo, return to ~town-square. To learn more about setting up your own Mattermost environment or to request your own trial site, click [here](https://mattermost.com/trial/).
             short: False
-
-  ###############################################################

@@ -2,9 +2,7 @@ id: incident_response
 name: Incident Response
 priority: 1
 description: >
-  **Description:** Witness a “war room” where technicians are responding to and solving an immediate security issue. Watch how resolution times are shortened with easy coordination and automation in Mattermost channels. 
-
-  **Audience:** DevOps, InfoSec         **Length:** 2 minutes
+  **Description:** Witness a “war room” where technicians are responding to and solving an immediate security issue.  
 channel:
   id: incident_response
   name: Incident Response
@@ -27,13 +25,13 @@ users:
     name: Cordell Hoffman
     position: Network Manager
   - id: incidentbot
-    name: PaloAltoBank Incident Bot
+    name: Incident Bot
     bot: true
   - id: threatbot
     name: Email Threat Bot
     bot: true
   - id: zendesk
-    name: PaloAltoBank ZenDesk Bot
+    name: ZenDesk Bot
     bot: true
 messages:
   - user_id: demobot
@@ -46,7 +44,7 @@ messages:
         author_name: DemoBot
         fields:
           - title:
-            value: Time is crucial in a incident response scenario.  Within minutes the team is alerted to an issue and taking action.  Effort required to coordinate resources and keep eveyone informed is streamlined and resolution times are shortened.   
+            value: Time is crucial in a incident response scenario.  Within minutes the team is automatically alerted to an issue and taking action without the effort of manual coordination.  Keeping eveyone informed of progress is made simple and resolution times are shortened by many critical minutes.
             short: False
     post_delay: 10
   - user_id: incidentbot
@@ -70,7 +68,7 @@ messages:
 
           From: Selena Adams <ceoxxo@example.com>
 
-          To: <ariella.hess@paloaltobank.org>
+          To: <ariella.hess@acmebank.org>
 
           Content-Type: multipart/alternative; boundary="000000000000753ba0057fbfbae5"
 
@@ -141,6 +139,10 @@ messages:
     text: >
       Looks similar to a phishing email received recently by Steve from Finance.
     post_delay: 6
+    reactions:
+      - user_id: mnorris
+        id: email
+        delay: 2
   - user_id: dhuber
     text: >
       @mnorris send a reminder to everyone on procedure for phishing attacks
@@ -158,6 +160,10 @@ messages:
         text: >
           Good work, guys! Thanks for the quick response and resolution.
         post_delay: 6
+  - user_id: mnorris
+    text: >
+      :smile:
+    post_delay: 6
   - user_id: zendesk
     attachments:
       - title: >
@@ -187,7 +193,7 @@ messages:
   - user_id: demobot
     attachments:
       - title: >
-          Incident Response Demo Is Complete
+          Incident Response Demo Is Complete :tada:
         titleLink:
         color: >
           #213f6b
@@ -213,5 +219,3 @@ responses:
             #ff0000
           text: >
             Added Blacklist Entry: `example.com`
-
-    ##############################
