@@ -5,5 +5,5 @@ var manifest = struct {
 	Version string
 }{
 	Id:      "com.dschalla.matterdemo-plugin",
-	Version: "1.0.1",
+	Version: "1.1.1",
 }

@@ -119,13 +119,12 @@ func (sr *ScriptRunner) Start() error {
 	ephemeralPost := &model.Post{
 		UserId: sr.botId,
 		ChannelId: channel.Id,
-		Message: fmt.Sprintf("@%s, please access the %s demo [here](%s).", creator.Username, sr.script.Name, fullPath),
+		Message: fmt.Sprintf("@%s, you can check out the %s demo [here](%s).", creator.Username, sr.script.Name, fullPath),
 	}
 	ephemeralPost.AddProp("override_username", "DemoBot")
 	ephemeralPost.AddProp("override_icon_url", path.Join(siteUrl, "/api/v4/users/", sr.botId, "image"))
 	ephemeralPost.AddProp("from_webhook", "true")
 	sr.api.SendEphemeralPost(sr.creatorId, ephemeralPost)
-
 
 	/*
 	// Disabled for now
