@@ -59,7 +59,7 @@ func (sm *ScriptManager) GetScriptCount() int {
 }
 
 func (sm *ScriptManager) StartScript(teamId, userId, scriptId string) {
-	sm.api.LogDebug(fmt.Sprintf("Starting new Runner for script id %s for team %s and user %s", scriptId, teamId, userId))
+	sm.api.LogInfo(fmt.Sprintf("Starting new runner for script id %s for team %s and user %s", scriptId, teamId, userId))
 
 	script, err := sm.GetScript(scriptId)
 

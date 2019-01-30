@@ -7,6 +7,7 @@ import (
 	"github.com/mattermost/mattermost-server/plugin"
 	"io/ioutil"
 	"math/rand"
+	"path"
 	"strconv"
 	"time"
 )
@@ -94,6 +95,37 @@ func (sr *ScriptRunner) Start() error {
 	if err != nil {
 		sr.api.LogError(fmt.Sprintf("Error creating channel member for Script: %s", err))
 	}
+
+	team, err := sr.api.GetTeam(sr.teamId)
+	if err != nil {
+		sr.api.LogError(fmt.Sprintf("Error fetching team: %s", err))
+	}
+
+	channel, err := sr.api.GetChannelByName(sr.teamId, model.DEFAULT_CHANNEL,false)
+	if err != nil {
+		sr.api.LogError(fmt.Sprintf("Error getting default channel: %s", err))
+	}
+
+	creator, err := sr.api.GetUser(sr.creatorId)
+	if err != nil {
+		sr.api.LogError(fmt.Sprintf("Error getting creator user: %s", err))
+	}
+
+	siteUrl := *sr.api.GetConfig().ServiceSettings.SiteURL
+	fullPath := siteUrl + path.Join("/", team.Name, "/", "channels", "/", sr.script.Channel.Id + sr.randomNr)
+	sr.api.LogDebug("SiteURL: %s", siteUrl)
+	sr.api.LogDebug("Full Path: %s", fullPath)
+	sr.api.LogDebug("Image URL: %s", siteUrl + path.Join("/api/v4/users/", sr.botId, "image"))
+	ephemeralPost := &model.Post{
+		UserId: sr.botId,
+		ChannelId: channel.Id,
+		Message: fmt.Sprintf("@%s, please access the %s demo [here](%s).", creator.Username, sr.script.Name, fullPath),
+	}
+	ephemeralPost.AddProp("override_username", "DemoBot")
+	ephemeralPost.AddProp("override_icon_url", path.Join(siteUrl, "/api/v4/users/", sr.botId, "image"))
+	ephemeralPost.AddProp("from_webhook", "true")
+	sr.api.SendEphemeralPost(sr.creatorId, ephemeralPost)
+
 
 	/*
 	// Disabled for now

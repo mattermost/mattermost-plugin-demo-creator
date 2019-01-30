@@ -2,7 +2,7 @@ id: development
 name: Development
 priority: 2
 description: >
-  **Description:** Check in on the release team managing complex release processes with checklists and shared resources.
+  Check in on the release team managing complex release processes with checklists and shared resources.
 channel:
   id: development
   name: Development
@@ -36,7 +36,7 @@ users:
   - id: llloyd
     name: Laurell Lloyd
     position: Quality Assurance
-  - id: JenkinsBot
+  - id: jenkinsbot
     name: Jenkins Bot
     bot: true
   - id: jirabot
@@ -118,7 +118,7 @@ messages:
 
           - [x] Update existing tickets or create new ones for the next release
         post_delay: 6
-  - user_id: Jenkins Bot
+  - user_id: jenkinsbot
     attachments:
       - title: >
           Release Built Complete
@@ -213,14 +213,14 @@ messages:
     text: >
       Fix has been submitted.  Can I get a review quick from my other devs?
     post_delay: 6
-  - user_id: GithubBot
+  - user_id: githubbot
     attachments:
       - title: >
-          PR Sumbmitted 
+          PR Submitted
         titleLink:
         color: >
           #213f6b
-        author_name: GithubBot
+        author_name: Github Bot
         fields:
           - title: Description
             value: Broken File Uploads Fix
@@ -231,7 +231,7 @@ messages:
           Looks good.  Wondering about your logic here, but I can queue for our developer’s conversation later in the week.
       - user_id: gjackson
         text: >
-          ``` go
+          ```js
 
           export function trimFilename(filename) {
 

@@ -2,7 +2,7 @@ id: monitoring
 name: Monitoring
 priority: 3
 description: >
-  **Description:** Keep up to the minute with tracking of real-time system events and manage issues before they arise.
+  Keep up to the minute with tracking of real-time system events and manage issues before they arise.
 channel:
   id: monitoring
   name: Monitoring

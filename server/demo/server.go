@@ -140,11 +140,10 @@ func (s *Server) SendWelcomePost(channelId string) *model.Post{
 
 	for _, script := range scripts {
 		attachments = append(attachments, &model.SlackAttachment{
-			Title:      fmt.Sprintf("Script #%d: %s", i, script.Name),
-			Text:       script.Description,
+			Text: fmt.Sprintf("**%s**: %s", script.Name ,script.Description),
 			Actions: []*model.PostAction{
 				{
-					Name: "Start Demo",
+					Name: "START DEMO",
 					Integration: &model.PostActionIntegration{
 						URL: url + "/plugins/com.dschalla.matterdemo-plugin/start_script",
 						Context: map[string]interface{}{
@@ -185,7 +184,7 @@ func (s *Server) StartScript(teamId, userId, scriptId string) {
 }
 
 func (s *Server) TriggerResponse(channelId, userId, scriptId, responseId string) error {
-	s.api.LogDebug(fmt.Sprintf("Starting new Runner for script id %s for team %s and user %s", channelId, userId, responseId))
+	s.api.LogDebug(fmt.Sprintf("Trigger new response for script id %s for team %s and user %s", channelId, userId, responseId))
 
 	err := s.scriptManager.TriggerResponse(responseId, channelId, userId)
 
@@ -193,7 +192,7 @@ func (s *Server) TriggerResponse(channelId, userId, scriptId, responseId string)
 		s.api.LogError(fmt.Sprintf("Error triggering response: %s", err))
 		return err
 	}
-	s.api.LogDebug(fmt.Sprintf("Starting new Runner for script id %s for team %s and user %s", channelId, userId, responseId))
+	s.api.LogDebug(fmt.Sprintf("End new response for script id %s for team %s and user %s", channelId, userId, responseId))
 
 	return nil
 }

@@ -2,7 +2,7 @@ id: incident_response
 name: Incident Response
 priority: 1
 description: >
-  **Description:** Witness a “war room” where technicians are responding to and solving an immediate security issue.  
+  Witness a “war room” where technicians are responding to and solving an immediate security issue.
 channel:
   id: incident_response
   name: Incident Response
