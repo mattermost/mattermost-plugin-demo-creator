@@ -17,8 +17,8 @@ func NewServer(api plugin.API) *Server {
 }
 
 type Server struct {
-	api     plugin.API
-	botUser *model.User
+	api           plugin.API
+	botUser       *model.User
 	scriptManager *ScriptManager
 }
 
@@ -100,7 +100,7 @@ func (s *Server) RegisterBotUser() error {
 	return nil
 }
 
-func (s *Server) SendWelcomePost(channelId string) *model.Post{
+func (s *Server) SendWelcomePost(channelId string) *model.Post {
 
 	post := &model.Post{}
 	post.ChannelId = channelId
@@ -140,7 +140,7 @@ func (s *Server) SendWelcomePost(channelId string) *model.Post{
 
 	for _, script := range scripts {
 		attachments = append(attachments, &model.SlackAttachment{
-			Text: fmt.Sprintf("**%s**: %s", script.Name ,script.Description),
+			Text: fmt.Sprintf("**%s**: %s", script.Name, script.Description),
 			Actions: []*model.PostAction{
 				{
 					Name: "START DEMO",

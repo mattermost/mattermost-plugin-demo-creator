@@ -66,7 +66,7 @@ func (sr *ScriptRunner) Start() error {
 		if err2 != nil {
 			sr.api.LogError(fmt.Sprintf("Error reading profile picture: %s", err2))
 		} else {
-			err := sr.api.SetProfileImage(systemUser.Id, data)
+			err = sr.api.SetProfileImage(systemUser.Id, data)
 			if err != nil {
 				sr.api.LogError(fmt.Sprintf("Error setting profile picture: %s", err))
 				return err
@@ -76,7 +76,7 @@ func (sr *ScriptRunner) Start() error {
 		teamMember, _ := sr.api.GetTeamMember(sr.teamId, systemUser.Id)
 
 		if teamMember == nil {
-			_, err := sr.api.CreateTeamMember(sr.teamId, systemUser.Id)
+			_, err = sr.api.CreateTeamMember(sr.teamId, systemUser.Id)
 
 			if err != nil {
 				sr.api.LogError(fmt.Sprintf("Error creating team member for Script: %s", err))
@@ -101,7 +101,7 @@ func (sr *ScriptRunner) Start() error {
 		sr.api.LogError(fmt.Sprintf("Error fetching team: %s", err))
 	}
 
-	channel, err := sr.api.GetChannelByName(sr.teamId, model.DEFAULT_CHANNEL,false)
+	channel, err := sr.api.GetChannelByName(sr.teamId, model.DEFAULT_CHANNEL, false)
 	if err != nil {
 		sr.api.LogError(fmt.Sprintf("Error getting default channel: %s", err))
 	}
@@ -112,14 +112,11 @@ func (sr *ScriptRunner) Start() error {
 	}
 
 	siteUrl := *sr.api.GetConfig().ServiceSettings.SiteURL
-	fullPath := siteUrl + path.Join("/", team.Name, "/", "channels", "/", sr.script.Channel.Id + sr.randomNr)
-	sr.api.LogDebug("SiteURL: %s", siteUrl)
-	sr.api.LogDebug("Full Path: %s", fullPath)
-	sr.api.LogDebug("Image URL: %s", siteUrl + path.Join("/api/v4/users/", sr.botId, "image"))
+	fullPath := siteUrl + path.Join("/", team.Name, "/", "channels", "/", sr.script.Channel.Id+sr.randomNr)
 	ephemeralPost := &model.Post{
-		UserId: sr.botId,
+		UserId:    sr.botId,
 		ChannelId: channel.Id,
-		Message: fmt.Sprintf("@%s, you can check out the %s demo [here](%s).", creator.Username, sr.script.Name, fullPath),
+		Message:   fmt.Sprintf("@%s, you can check out the %s demo [here](%s).", creator.Username, sr.script.Name, fullPath),
 	}
 	ephemeralPost.AddProp("override_username", "DemoBot")
 	ephemeralPost.AddProp("override_icon_url", path.Join(siteUrl, "/api/v4/users/", sr.botId, "image"))
@@ -127,10 +124,10 @@ func (sr *ScriptRunner) Start() error {
 	sr.api.SendEphemeralPost(sr.creatorId, ephemeralPost)
 
 	/*
-	// Disabled for now
-	sr.sendScriptProlog()
-	time.Sleep(time.Second * time.Duration(10))
-	 */
+		// Disabled for now
+		sr.sendScriptProlog()
+		time.Sleep(time.Second * time.Duration(10))
+	*/
 	time.Sleep(time.Second * time.Duration(2))
 	sr.api.LogDebug("Starting Post Generation...")
 
@@ -285,7 +282,7 @@ func (sr *ScriptRunner) sendMessage(message ScriptMessage, rootId string) error 
 	return nil
 }
 
-func (sr *ScriptRunner) createReactions (postId string, reactions []ScriptReaction) {
+func (sr *ScriptRunner) createReactions(postId string, reactions []ScriptReaction) {
 	for _, reaction := range reactions {
 		go func(reaction ScriptReaction) {
 

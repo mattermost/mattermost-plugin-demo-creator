@@ -19,11 +19,11 @@ type Plugin struct {
 	server *demo.Server
 }
 
-func (p *Plugin) OnActivate() error{
+func (p *Plugin) OnActivate() error {
 	p.server = demo.NewServer(p.API)
 	err := p.server.Start()
 
-	if err != nil && (reflect.ValueOf(err).Kind() == reflect.Ptr && !reflect.ValueOf(err).IsNil()){
+	if err != nil && (reflect.ValueOf(err).Kind() == reflect.Ptr && !reflect.ValueOf(err).IsNil()) {
 		return err
 	}
 
@@ -66,7 +66,7 @@ func (p *Plugin) OnActivate() error{
 			}
 		}
 
-		p.API.KVSet("welcomePostTownSquare-" + team.Id, []byte(post.Id))
+		p.API.KVSet("welcomePostTownSquare-"+team.Id, []byte(post.Id))
 
 	}
 
@@ -87,12 +87,12 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 	p.API.LogInfo(fmt.Sprintf("REQUEST URL: %s", r.URL.Path))
 
 	path := r.URL.Path
-	requestData := struct{
-		UserId string `json:"user_id"`
-		PostId string `json:"post_id"`
+	requestData := struct {
+		UserId    string `json:"user_id"`
+		PostId    string `json:"post_id"`
 		ChannelId string `json:"channel_id"`
-		TeamId string `json:"team_id"`
-		Context map[string]string
+		TeamId    string `json:"team_id"`
+		Context   map[string]string
 	}{}
 
 	if strings.HasPrefix(path, "/start_script") {
