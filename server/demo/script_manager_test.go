@@ -1,12 +1,12 @@
 package demo_test
 
 import (
-	"github.com/DSchalla/MatterDemo-Plugin/server/demo"
+	"github.com/mattermost/mattermost-plugin-demo-creator/server/demo"
 	"testing"
 )
 
 func TestNewScriptManager(t *testing.T) {
-	sm, err := demo.NewScriptManager(nil,"../test/scripts")
+	sm, err := demo.NewScriptManager(nil, "../test/scripts")
 
 	if err != nil {
 		t.Errorf("Expected nil, got %s", err)

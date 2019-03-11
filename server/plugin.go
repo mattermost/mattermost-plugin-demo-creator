@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/DSchalla/MatterDemo-Plugin/server/demo"
+	"github.com/mattermost/mattermost-plugin-demo-creator/server/demo"
 	"github.com/mattermost/mattermost-server/model"
 	"github.com/mattermost/mattermost-server/plugin"
 	"io/ioutil"
