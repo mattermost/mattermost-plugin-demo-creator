@@ -29,11 +29,11 @@ func NewScriptManager(api plugin.API, scriptDir string) (*ScriptManager, error) 
 }
 
 type ScriptManager struct {
-	api        plugin.API
-	botId      string
-	scriptDir  string
-	scripts    map[string]Script
-	runner     sync.Map
+	api       plugin.API
+	botId     string
+	scriptDir string
+	scripts   map[string]Script
+	runner    sync.Map
 }
 
 func (sm *ScriptManager) SetBotId(id string) {
@@ -87,7 +87,7 @@ func (sm *ScriptManager) StartScript(teamId, userId, scriptId string) {
 	sm.api.LogDebug(fmt.Sprintf("Stopping runner for script id %s for team %s and user %s", scriptId, teamId, userId))
 }
 
-func (sm *ScriptManager) TriggerResponse(responseId, channelId, userId string) error{
+func (sm *ScriptManager) TriggerResponse(responseId, channelId, userId string) error {
 	sm.api.LogDebug(fmt.Sprintf("Starting response trigger for reaction id %s for team %s and user %s", responseId, channelId, userId))
 
 	data, ok := sm.runner.Load(channelId)

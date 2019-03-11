@@ -4,7 +4,7 @@ type Script struct {
 	Id          string
 	Name        string
 	Description string
-	Priority 	int
+	Priority    int
 	Channel     ScriptChannel
 	Users       []ScriptUser
 	Messages    []ScriptMessage
@@ -31,7 +31,7 @@ type ScriptMessage struct {
 	Attachments []ScriptAttachment
 	Reactions   []ScriptReaction
 	PostDelay   int `yaml:"post_delay"`
-	Replies		[]ScriptMessage
+	Replies     []ScriptMessage
 }
 
 type ScriptAttachment struct {
@@ -40,7 +40,7 @@ type ScriptAttachment struct {
 	Color       string
 	AuthorName  string `yaml:"author_name"`
 	AuthorImage string `yaml:"author_image"`
-	Text 		string
+	Text        string
 	Fields      []ScriptAttachmentField
 	Actions     []ScriptAttachmentAction
 }
