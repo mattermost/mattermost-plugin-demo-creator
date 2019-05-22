@@ -3,13 +3,14 @@ package demo
 import (
 	"errors"
 	"fmt"
-	"github.com/mattermost/mattermost-server/model"
-	"github.com/mattermost/mattermost-server/plugin"
 	"io/ioutil"
 	"math/rand"
 	"path"
 	"strconv"
 	"time"
+
+	"github.com/mattermost/mattermost-server/model"
+	"github.com/mattermost/mattermost-server/plugin"
 )
 
 func NewScriptRunner(api plugin.API, script Script, botId, teamId, userId string) (*ScriptRunner, error) {
@@ -232,7 +233,7 @@ func (sr *ScriptRunner) sendMessage(message ScriptMessage, rootId string) error 
 			slackAttachment.Fields = append(slackAttachment.Fields, &model.SlackAttachmentField{
 				Title: field.Title,
 				Value: field.Value,
-				Short: field.Short,
+				Short: model.SlackCompatibleBool(field.Short),
 			})
 		}
 
